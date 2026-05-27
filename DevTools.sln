@@ -1,0 +1,27 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{42F82DCD-A196-422E-A46E-D5F3F7303CE3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevTools.App", "src\DevTools.App\DevTools.App.csproj", "{6E9D79EB-EB11-441A-AC14-3B9E2B78304A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6E9D79EB-EB11-441A-AC14-3B9E2B78304A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E9D79EB-EB11-441A-AC14-3B9E2B78304A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E9D79EB-EB11-441A-AC14-3B9E2B78304A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E9D79EB-EB11-441A-AC14-3B9E2B78304A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{6E9D79EB-EB11-441A-AC14-3B9E2B78304A} = {42F82DCD-A196-422E-A46E-D5F3F7303CE3}
+	EndGlobalSection
+EndGlobal
