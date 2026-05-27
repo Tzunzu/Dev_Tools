@@ -1,5 +1,6 @@
 using System.Drawing;
 using System.Windows.Forms;
+using DevTools.App.Infrastructure.UI;
 
 namespace DevTools.App.Controls.ToolViews;
 
@@ -28,10 +29,11 @@ internal sealed partial class ModbusRtuClientView
     private Button addSlaveButton = null!;
     private Button pollButton = null!;
     private Button saveConfigButton = null!;
+    private Button updateConfigButton = null!;
     private ComboBox configPresetComboBox = null!;
     private Button renameConfigButton = null!;
     private Button deleteConfigButton = null!;
-    private FlowLayoutPanel slaveTablesHostPanel = null!;
+    private ThemedHorizontalScrollFlowPanel slaveTablesHostPanel = null!;
 
     private void InitializeComponent()
     {
@@ -58,10 +60,11 @@ internal sealed partial class ModbusRtuClientView
         addSlaveButton = new Button();
         pollButton = new Button();
         saveConfigButton = new Button();
+        updateConfigButton = new Button();
         configPresetComboBox = new ComboBox();
         renameConfigButton = new Button();
         deleteConfigButton = new Button();
-        slaveTablesHostPanel = new FlowLayoutPanel();
+        slaveTablesHostPanel = new ThemedHorizontalScrollFlowPanel();
         rootLayout.SuspendLayout();
         connectionGroup.SuspendLayout();
         connectionLayout.SuspendLayout();
@@ -334,6 +337,7 @@ internal sealed partial class ModbusRtuClientView
         requestToolbar.Controls.Add(addSlaveButton);
         requestToolbar.Controls.Add(pollButton);
         requestToolbar.Controls.Add(saveConfigButton);
+        requestToolbar.Controls.Add(updateConfigButton);
         requestToolbar.Controls.Add(configPresetComboBox);
         requestToolbar.Controls.Add(renameConfigButton);
         requestToolbar.Controls.Add(deleteConfigButton);
@@ -380,25 +384,37 @@ internal sealed partial class ModbusRtuClientView
         saveConfigButton.UseVisualStyleBackColor = true;
         saveConfigButton.Click += saveConfigButton_Click;
         // 
+        // updateConfigButton
+        // 
+        updateConfigButton.Enabled = false;
+        updateConfigButton.Location = new Point(296, 3);
+        updateConfigButton.Margin = new Padding(0, 3, 8, 3);
+        updateConfigButton.Name = "updateConfigButton";
+        updateConfigButton.Size = new Size(100, 27);
+        updateConfigButton.TabIndex = 4;
+        updateConfigButton.Text = "Update Config";
+        updateConfigButton.UseVisualStyleBackColor = true;
+        updateConfigButton.Click += updateConfigButton_Click;
+        // 
         // configPresetComboBox
         // 
         configPresetComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
         configPresetComboBox.FormattingEnabled = true;
-        configPresetComboBox.Location = new Point(296, 4);
+        configPresetComboBox.Location = new Point(404, 4);
         configPresetComboBox.Margin = new Padding(0, 4, 0, 3);
         configPresetComboBox.Name = "configPresetComboBox";
-        configPresetComboBox.Size = new Size(210, 23);
-        configPresetComboBox.TabIndex = 4;
+        configPresetComboBox.Size = new Size(130, 23);
+        configPresetComboBox.TabIndex = 5;
         configPresetComboBox.SelectedIndexChanged += configPresetComboBox_SelectedIndexChanged;
         // 
         // renameConfigButton
         // 
         renameConfigButton.Enabled = false;
-        renameConfigButton.Location = new Point(514, 3);
+        renameConfigButton.Location = new Point(542, 3);
         renameConfigButton.Margin = new Padding(8, 3, 6, 3);
         renameConfigButton.Name = "renameConfigButton";
-        renameConfigButton.Size = new Size(72, 27);
-        renameConfigButton.TabIndex = 5;
+        renameConfigButton.Size = new Size(66, 27);
+        renameConfigButton.TabIndex = 6;
         renameConfigButton.Text = "Rename";
         renameConfigButton.UseVisualStyleBackColor = true;
         renameConfigButton.Click += renameConfigButton_Click;
@@ -406,11 +422,11 @@ internal sealed partial class ModbusRtuClientView
         // deleteConfigButton
         // 
         deleteConfigButton.Enabled = false;
-        deleteConfigButton.Location = new Point(592, 3);
+        deleteConfigButton.Location = new Point(614, 3);
         deleteConfigButton.Margin = new Padding(0, 3, 0, 3);
         deleteConfigButton.Name = "deleteConfigButton";
-        deleteConfigButton.Size = new Size(64, 27);
-        deleteConfigButton.TabIndex = 6;
+        deleteConfigButton.Size = new Size(60, 27);
+        deleteConfigButton.TabIndex = 7;
         deleteConfigButton.Text = "Delete";
         deleteConfigButton.UseVisualStyleBackColor = true;
         deleteConfigButton.Click += deleteConfigButton_Click;

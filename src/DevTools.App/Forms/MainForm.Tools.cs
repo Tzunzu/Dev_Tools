@@ -13,12 +13,16 @@ internal sealed partial class MainForm
         ["Modbus RTU client"] = static () => new ModbusRtuClientView(),
         ["Modbus RTU Server"] = static () => new ModbusRtuServerView(),
         ["Modbus TCP client"] = static () => new ModbusTcpClientView(),
-        ["Modbus TCP Server"] = static () => new ModbusTcpServerView()
+        ["Modbus TCP Server"] = static () => new ModbusTcpServerView(),
+        ["Settings"] = static () => new SettingsView()
     };
+    private readonly Dictionary<string, Control> toolViewCache = new(StringComparer.Ordinal);
+    private Control? welcomeView;
 
     private void InitializeToolWorkspace()
     {
-        ShowToolView("Welcome", new WelcomeView());
+        welcomeView = new WelcomeView();
+        ShowToolView("Welcome", welcomeView);
         navigationTree.ExpandAll();
         navigationTree.SelectedNode = navigationTree.Nodes.Count > 0 ? navigationTree.Nodes[0] : null;
     }
@@ -27,21 +31,48 @@ internal sealed partial class MainForm
     {
         if (toolViewFactories.TryGetValue(selectedText, out var createView))
         {
-            ShowToolView(selectedText, createView());
+            if (!toolViewCache.TryGetValue(selectedText, out var view))
+            {
+                view = createView();
+                toolViewCache[selectedText] = view;
+            }
+
+            ShowToolView(selectedText, view);
             return;
         }
 
-        ShowToolView(selectedText, new WelcomeView());
+        if (welcomeView is null || welcomeView.IsDisposed)
+        {
+            welcomeView = new WelcomeView();
+        }
+
+        ShowToolView(selectedText, welcomeView);
     }
 
     private void ShowToolView(string title, Control view)
     {
         workAreaGroup.Text = title;
         workAreaHostPanel.SuspendLayout();
-        workAreaHostPanel.Controls.Clear();
+        if (!workAreaHostPanel.Controls.Contains(view))
+        {
+            foreach (Control control in workAreaHostPanel.Controls)
+            {
+                control.Visible = false;
+            }
+
+            AppTheme.Apply(view);
+            view.Dock = DockStyle.Fill;
+            workAreaHostPanel.Controls.Add(view);
+        }
+
+        foreach (Control control in workAreaHostPanel.Controls)
+        {
+            control.Visible = ReferenceEquals(control, view);
+        }
+
         AppTheme.Apply(view);
         view.Dock = DockStyle.Fill;
-        workAreaHostPanel.Controls.Add(view);
+        view.BringToFront();
         workAreaHostPanel.ResumeLayout();
     }
 }

@@ -1,8 +1,10 @@
 using DevTools.App.Controllers.Modbus;
 using DevTools.App.Libraries.Com;
 using DevTools.App.Libraries.Modbus;
+using DevTools.App.Infrastructure.UI;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.IO.Ports;
@@ -55,6 +57,7 @@ internal sealed partial class ModbusRtuClientView : UserControl
     public ModbusRtuClientView()
     {
         InitializeComponent();
+        NormalizeConnectionLayout();
 
         savedConfigFilePath = BuildSavedConfigFilePath();
 
@@ -68,6 +71,66 @@ internal sealed partial class ModbusRtuClientView : UserControl
         PopulateComPorts();
         InitializeSlaveTables();
         LoadConfigurationsFromDisk();
+    }
+
+    private void NormalizeConnectionLayout()
+    {
+        var portField = BuildLabeledField("Port", portComboBox, 132);
+        var baudField = BuildLabeledField("Baud", baudRateComboBox, 72);
+        var frameField = BuildLabeledField("Frame", frameComboBox, 74);
+        var pollField = BuildLabeledField("Poll ms", pollIntervalTextBox, 58);
+
+        connectionLayout.SuspendLayout();
+        connectionLayout.Controls.Clear();
+        connectionLayout.ColumnStyles.Clear();
+        connectionLayout.ColumnCount = 9;
+        connectionLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 190F));
+        connectionLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 130F));
+        connectionLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 136F));
+        connectionLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 110F));
+        connectionLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 48F));
+        connectionLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 48F));
+        connectionLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 92F));
+        connectionLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 80F));
+        connectionLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+
+        connectionLayout.Controls.Add(portField, 0, 0);
+        connectionLayout.Controls.Add(baudField, 1, 0);
+        connectionLayout.Controls.Add(frameField, 2, 0);
+        connectionLayout.Controls.Add(pollField, 3, 0);
+        connectionLayout.Controls.Add(rtsCheckBox, 4, 0);
+        connectionLayout.Controls.Add(dtrCheckBox, 5, 0);
+        connectionLayout.Controls.Add(connectButton, 6, 0);
+        connectionLayout.Controls.Add(refreshPortsButton, 7, 0);
+        connectionLayout.Controls.Add(connectionStatusLabel, 8, 0);
+        connectionLayout.ResumeLayout();
+    }
+
+    private static Control BuildLabeledField(string labelText, Control input, int inputWidth)
+    {
+        var panel = new FlowLayoutPanel
+        {
+            AutoSize = true,
+            AutoSizeMode = AutoSizeMode.GrowAndShrink,
+            Dock = DockStyle.Fill,
+            FlowDirection = FlowDirection.LeftToRight,
+            Margin = new Padding(0),
+            WrapContents = false
+        };
+
+        var label = new Label
+        {
+            AutoSize = true,
+            Margin = new Padding(0, 6, 6, 0),
+            Text = labelText
+        };
+
+        input.Margin = new Padding(0, 2, 0, 0);
+        input.Width = inputWidth;
+
+        panel.Controls.Add(label);
+        panel.Controls.Add(input);
+        return panel;
     }
 
     protected override void Dispose(bool disposing)
@@ -128,7 +191,46 @@ internal sealed partial class ModbusRtuClientView : UserControl
             return;
         }
 
-        var snapshot = slaveConfigs
+        var snapshot = BuildConfigurationSnapshot();
+
+        savedConfigurations[name] = snapshot;
+        savedConfigurationPollRates[name] = GetGlobalPollRateMs();
+        RefreshConfigurationDropdown(name);
+        SaveConfigurationsToDisk();
+    }
+
+    private void updateConfigButton_Click(object? sender, EventArgs e)
+    {
+        var selectedName = GetSelectedPresetName();
+        if (string.IsNullOrWhiteSpace(selectedName))
+        {
+            MessageBox.Show(
+                "Select a configuration preset first.",
+                "Update Configuration",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information);
+            return;
+        }
+
+        if (!savedConfigurations.ContainsKey(selectedName))
+        {
+            MessageBox.Show(
+                "The selected preset is no longer available.",
+                "Update Configuration",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Warning);
+            return;
+        }
+
+        savedConfigurations[selectedName] = BuildConfigurationSnapshot();
+        savedConfigurationPollRates[selectedName] = GetGlobalPollRateMs();
+        RefreshConfigurationDropdown(selectedName);
+        SaveConfigurationsToDisk();
+    }
+
+    private List<SlaveColumnConfig> BuildConfigurationSnapshot()
+    {
+        return slaveConfigs
             .Select(config => new SlaveColumnConfig
             {
                 Key = config.Key,
@@ -144,11 +246,6 @@ internal sealed partial class ModbusRtuClientView : UserControl
                     : new Dictionary<int, string>()
             })
             .ToList();
-
-        savedConfigurations[name] = snapshot;
-        savedConfigurationPollRates[name] = GetGlobalPollRateMs();
-        RefreshConfigurationDropdown(name);
-        SaveConfigurationsToDisk();
     }
 
     private void configPresetComboBox_SelectedIndexChanged(object? sender, EventArgs e)
@@ -280,49 +377,11 @@ internal sealed partial class ModbusRtuClientView : UserControl
 
     private void AddSlaveTable(SlaveColumnConfig config)
     {
-        var group = new GroupBox
-        {
-            Margin = new Padding(0, 0, 6, 0),
-            Padding = new Padding(6),
-            Text = BuildSlaveTitle(config),
-            ForeColor = System.Drawing.Color.FromArgb(51, 65, 85)
-        };
-
-        var rootPanel = new TableLayoutPanel
-        {
-            Dock = DockStyle.Fill,
-            ColumnCount = 1,
-            RowCount = 3,
-            Margin = new Padding(0)
-        };
-        rootPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 56F));
-        rootPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 16F));
-        rootPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-
-        var headerPanel = new TableLayoutPanel
-        {
-            Dock = DockStyle.Fill,
-            Margin = new Padding(0),
-            ColumnCount = 1,
-            RowCount = 1
-        };
-
-        headerPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-
-        var inputGrid = new TableLayoutPanel
-        {
-            AutoSize = true,
-            AutoSizeMode = AutoSizeMode.GrowAndShrink,
-            Dock = DockStyle.Left,
-            Margin = new Padding(0),
-            ColumnCount = 2,
-            RowCount = 2
-        };
-
-        inputGrid.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 138F));
-        inputGrid.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 74F));
-        inputGrid.RowStyles.Add(new RowStyle(SizeType.Absolute, 24F));
-        inputGrid.RowStyles.Add(new RowStyle(SizeType.Absolute, 24F));
+        var cardShell = ModbusClientSlaveCardFactory.Create(config.FunctionCode, config.SlaveId, config.StartRegister, config.RegisterCount, new Padding(6, 2, 6, 6));
+        var group = cardShell.Group;
+        var rootPanel = cardShell.RootPanel;
+        var headerPanel = cardShell.HeaderHost;
+        group.Text = BuildSlaveTitle(config);
 
         var registerNumberFormat = ParseRegisterNumberFormat(config.RegisterNumberFormat);
         var registerValueDataType = ParseRegisterValueDataType(config.RegisterValueDataType);
@@ -404,30 +463,19 @@ internal sealed partial class ModbusRtuClientView : UserControl
         cardContextMenu.Items.Add(new ToolStripSeparator());
         cardContextMenu.Items.Add(closeMenuItem);
 
-        var slaveIdLabel = CreateCardLabel("ID");
-        var slaveIdInputHost = CreateCardInputHost(config.SlaveId.ToString(), 30, out var slaveIdInput);
+        var slaveIdInput = cardShell.UnitIdTextBox;
         slaveIdInput.TextChanged += (_, _) => UpdateSlaveConfigFromUi(config.Key);
 
-        var functionLabel = CreateCardLabel("Func");
-        var functionInput = CreateFunctionSelector(config.FunctionCode);
+        var functionInput = cardShell.FunctionComboBox;
         functionInput.SelectedIndexChanged += (_, _) => UpdateSlaveConfigFromUi(config.Key);
 
-        var startRegisterLabel = CreateCardLabel("Start");
-        var startRegisterInputHost = CreateCardInputHost(config.StartRegister.ToString(), 46, out var startRegisterInput);
+        var startRegisterInput = cardShell.StartTextBox;
         startRegisterInput.TextChanged += (_, _) => UpdateSlaveConfigFromUi(config.Key);
 
-        var registerCountLabel = CreateCardLabel("Len");
-        var registerCountInputHost = CreateCardInputHost(config.RegisterCount.ToString(), 30, out var registerCountInput);
+        var registerCountInput = cardShell.CountTextBox;
         registerCountInput.TextChanged += (_, _) => UpdateSlaveConfigFromUi(config.Key);
 
-        inputGrid.Controls.Add(CreateInlineCardField(functionLabel, functionInput, 30), 0, 0);
-        inputGrid.Controls.Add(CreateInlineCardField(slaveIdLabel, slaveIdInputHost, 20), 1, 0);
-        inputGrid.Controls.Add(CreateInlineCardField(startRegisterLabel, startRegisterInputHost, 30), 0, 1);
-        inputGrid.Controls.Add(CreateInlineCardField(registerCountLabel, registerCountInputHost, 20), 1, 1);
-
-        headerPanel.Controls.Add(inputGrid, 0, 0);
-
-        var grid = new DataGridView
+        var grid = new ThemedDataGridView
         {
             Dock = DockStyle.Fill,
             Margin = new Padding(0),
@@ -491,35 +539,18 @@ internal sealed partial class ModbusRtuClientView : UserControl
         grid.CellEndEdit += (_, args) => OnDescriptionEdited(config, args, grid);
     grid.CellDoubleClick += (_, args) => OnGridCellDoubleClick(config, args, grid);
 
-        var gridHostPanel = new Panel
-        {
-            Dock = DockStyle.Fill,
-            Margin = new Padding(0),
-            Padding = new Padding(6, 2, 6, 6)
-        };
+        var gridHostPanel = cardShell.ContentHost;
         gridHostPanel.Controls.Add(grid);
-
-        var statusLabel = new Label
-        {
-            Dock = DockStyle.Fill,
-            Margin = new Padding(2, 0, 0, 0),
-            Text = "Reads: 0  Err: 0",
-            Font = new System.Drawing.Font("Segoe UI", 7.5F),
-            ForeColor = System.Drawing.Color.FromArgb(71, 85, 105),
-            TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        };
-
-        rootPanel.Controls.Add(headerPanel, 0, 0);
-        rootPanel.Controls.Add(statusLabel, 0, 1);
-        rootPanel.Controls.Add(gridHostPanel, 0, 2);
-        group.Controls.Add(rootPanel);
+        var statusLabel = cardShell.StatusLabel;
         group.ContextMenuStrip = cardContextMenu;
         rootPanel.ContextMenuStrip = cardContextMenu;
         headerPanel.ContextMenuStrip = cardContextMenu;
-        inputGrid.ContextMenuStrip = cardContextMenu;
+        cardShell.HeaderPanel.ContextMenuStrip = cardContextMenu;
         gridHostPanel.ContextMenuStrip = cardContextMenu;
         grid.ContextMenuStrip = cardContextMenu;
         slaveTablesHostPanel.Controls.Add(group);
+
+        AppTheme.Apply(group);
 
         slaveGrids[config.Key] = grid;
         slaveGroups[config.Key] = group;
@@ -595,13 +626,17 @@ internal sealed partial class ModbusRtuClientView : UserControl
     private void ResizeSlaveTables()
     {
         var width = 220;
-        var availableHeight = slaveTablesHostPanel.ClientSize.Height - SystemInformation.HorizontalScrollBarHeight - 2;
+        var availableHeight = slaveTablesHostPanel.DisplayRectangle.Height - 2;
         var height = Math.Max(120, availableHeight);
 
-        foreach (Control control in slaveTablesHostPanel.Controls)
+        for (var index = 0; index < slaveTablesHostPanel.Controls.Count; index++)
         {
+            var control = slaveTablesHostPanel.Controls[index];
             control.Width = width;
             control.Height = height;
+            control.Margin = index == slaveTablesHostPanel.Controls.Count - 1
+                ? new Padding(0)
+                : new Padding(0, 0, 6, 0);
         }
     }
 
@@ -802,6 +837,7 @@ internal sealed partial class ModbusRtuClientView : UserControl
     private void UpdatePresetActionButtons()
     {
         var hasSelection = configPresetComboBox.SelectedItem is string;
+        updateConfigButton.Enabled = hasSelection;
         renameConfigButton.Enabled = hasSelection;
         deleteConfigButton.Enabled = hasSelection;
     }
@@ -947,7 +983,7 @@ internal sealed partial class ModbusRtuClientView : UserControl
             {
                 StopPolling();
                 serialPortService.Close();
-                connectionStatusLabel.Text = "Closed";
+                SetConnectionStatus("Closed", StatusTone.Info);
                 connectButton.Text = "Open Port";
                 pollButton.Enabled = false;
                 return;
@@ -957,13 +993,13 @@ internal sealed partial class ModbusRtuClientView : UserControl
             serialPortService.Configure(settings);
             serialPortService.Open();
 
-            connectionStatusLabel.Text = "Open";
+            SetConnectionStatus("Open", StatusTone.Success);
             connectButton.Text = "Close Port";
             pollButton.Enabled = true;
         }
         catch (Exception ex)
         {
-            connectionStatusLabel.Text = "Error";
+            SetConnectionStatus("Error", StatusTone.Error);
             Console.WriteLine("[raw] [connect-error] " + ex.Message);
         }
     }
@@ -1007,15 +1043,21 @@ internal sealed partial class ModbusRtuClientView : UserControl
             connectButton.Enabled = true;
             if (!serialPortService.IsOpen)
             {
-                connectionStatusLabel.Text = "Ready";
+                SetConnectionStatus("Ready", StatusTone.Info);
             }
         }
         else
         {
             connectButton.Enabled = false;
             pollButton.Enabled = false;
-            connectionStatusLabel.Text = "No Ports";
+            SetConnectionStatus("No Ports", StatusTone.Warning);
         }
+    }
+
+    private void SetConnectionStatus(string text, StatusTone tone)
+    {
+        connectionStatusLabel.Text = text;
+        connectionStatusLabel.ForeColor = AppTheme.GetStatusColor(tone);
     }
 
     private async void pollButton_Click(object? sender, EventArgs e)
@@ -1122,9 +1164,9 @@ internal sealed partial class ModbusRtuClientView : UserControl
         }
 
         if (slaveFunctionInputs.TryGetValue(key, out var functionInput)
-            && functionInput.SelectedItem is ModbusFunctionOption functionOption)
+            && ModbusClientCardHeaderFactory.TryGetSelectedFunctionCode(functionInput, out var functionCode))
         {
-            config.FunctionCode = functionOption.FunctionCode;
+            config.FunctionCode = functionCode;
         }
 
         if (startRegisterInputs.TryGetValue(key, out var startRegisterInput))
@@ -1157,98 +1199,6 @@ internal sealed partial class ModbusRtuClientView : UserControl
         var legacyPollRate = entry.Slaves.FirstOrDefault()?.PollRateMs ?? 1000;
         return Math.Max(100, legacyPollRate);
     }
-
-    private static Label CreateCardLabel(string text)
-    {
-        return new Label
-        {
-            AutoSize = true,
-            Dock = DockStyle.Left,
-            Margin = new Padding(0, 0, 4, 0),
-            Text = text,
-            TextAlign = System.Drawing.ContentAlignment.MiddleLeft,
-            ForeColor = System.Drawing.Color.FromArgb(100, 116, 139),
-            Font = new System.Drawing.Font("Segoe UI", 7.5F, System.Drawing.FontStyle.Bold)
-        };
-    }
-
-    private static Panel CreateInlineCardField(Control label, Control input, int labelWidth)
-    {
-        var host = new Panel
-        {
-            Dock = DockStyle.Fill,
-            Margin = new Padding(0, 1, 6, 1),
-            Height = 24
-        };
-
-        input.Location = new System.Drawing.Point(labelWidth + 2, 0);
-        input.Anchor = AnchorStyles.Left | AnchorStyles.Top;
-        label.Width = labelWidth;
-        label.Location = new System.Drawing.Point(0, 3);
-        host.Controls.Add(input);
-        host.Controls.Add(label);
-        return host;
-    }
-
-    private static Panel CreateCardInputHost(string text, int width, out TextBox input)
-    {
-        var host = new Panel
-        {
-            Dock = DockStyle.None,
-            Anchor = AnchorStyles.Left,
-            Margin = new Padding(0, 0, 6, 0),
-            BackColor = System.Drawing.Color.White,
-            BorderStyle = BorderStyle.FixedSingle,
-            Height = 19,
-            Width = width,
-            Padding = new Padding(4, 2, 2, 2)
-        };
-
-        input = new TextBox
-        {
-            Dock = DockStyle.Fill,
-            Margin = new Padding(0),
-            BorderStyle = BorderStyle.None,
-            Text = text,
-            TextAlign = HorizontalAlignment.Left,
-            BackColor = System.Drawing.Color.White,
-            ForeColor = System.Drawing.Color.FromArgb(15, 23, 42),
-            Font = new System.Drawing.Font("Segoe UI", 8.5F, System.Drawing.FontStyle.Regular),
-            AutoSize = false,
-            Height = 15,
-            MaxLength = 6
-        };
-
-        host.Controls.Add(input);
-        return host;
-    }
-
-    private static ComboBox CreateFunctionSelector(byte selectedFunctionCode)
-    {
-        var comboBox = new ComboBox
-        {
-            DropDownStyle = ComboBoxStyle.DropDownList,
-            Width = 106,
-            Margin = new Padding(0, 0, 6, 0),
-            DisplayMember = nameof(ModbusFunctionOption.Label),
-            ValueMember = nameof(ModbusFunctionOption.FunctionCode)
-        };
-
-        comboBox.Items.AddRange(ModbusFunctionOptions.Cast<object>().ToArray());
-
-        var selected = ModbusFunctionOptions.FirstOrDefault(option => option.FunctionCode == selectedFunctionCode)
-            ?? ModbusFunctionOptions[0];
-        comboBox.SelectedItem = selected;
-        return comboBox;
-    }
-
-    private static readonly ModbusFunctionOption[] ModbusFunctionOptions =
-    {
-        new("Coil", 0x01),
-        new("Discrete", 0x02),
-        new("Holding", 0x03),
-        new("Input", 0x04)
-    };
 
     private async void OnGridCellDoubleClick(SlaveColumnConfig config, DataGridViewCellEventArgs args, DataGridView grid)
     {
@@ -1301,7 +1251,6 @@ internal sealed partial class ModbusRtuClientView : UserControl
                 await readController.WriteHoldingRegistersAsync((byte)config.SlaveId, (ushort)startAddress, values, CancellationToken.None);
             }
 
-            ApplyWriteToCachedValues(config, startAddress, values);
             nextPollDueTimes[config.Key] = DateTimeOffset.UtcNow;
             ApplyRenderedValues(config);
         }
@@ -1323,7 +1272,7 @@ internal sealed partial class ModbusRtuClientView : UserControl
     {
         using var prompt = new Form
         {
-            Text = "Write " + GetFunctionLabel(config.FunctionCode),
+            Text = "Write " + ModbusClientCardHeaderFactory.GetFunctionLabel(config.FunctionCode),
             Width = 360,
             Height = 170,
             FormBorderStyle = FormBorderStyle.FixedDialog,
@@ -1628,7 +1577,7 @@ internal sealed partial class ModbusRtuClientView : UserControl
 
     private static string GetFunctionLabel(byte functionCode)
     {
-        return ModbusFunctionOptions.FirstOrDefault(option => option.FunctionCode == functionCode)?.Label ?? "Value";
+        return ModbusClientCardHeaderFactory.GetFunctionLabel(functionCode);
     }
 
     private static int ParseCardInput(string text, int fallbackValue, int minimum, int maximum)
@@ -2006,6 +1955,4 @@ internal sealed partial class ModbusRtuClientView : UserControl
         UDInt,
         Float
     }
-
-    private sealed record ModbusFunctionOption(string Label, byte FunctionCode);
 }

@@ -19,10 +19,28 @@ internal sealed partial class MainForm
             return;
         }
 
-        var item = new ListViewItem(DateTime.Now.ToString("HH:mm:ss"));
-        item.SubItems.Add(message);
-        outputListView.Items.Add(item);
-        outputListView.EnsureVisible(outputListView.Items.Count - 1);
+        outputEventsGrid.Rows.Add(DateTime.Now.ToString("HH:mm:ss"), message);
+
+        const int maxRows = 1500;
+        while (outputEventsGrid.Rows.Count > maxRows)
+        {
+            outputEventsGrid.Rows.RemoveAt(0);
+        }
+
+        if (outputEventsGrid.Rows.Count > 0)
+        {
+            var lastIndex = outputEventsGrid.Rows.Count - 1;
+            outputEventsGrid.ClearSelection();
+            outputEventsGrid.Rows[lastIndex].Selected = true;
+            try
+            {
+                outputEventsGrid.FirstDisplayedScrollingRowIndex = lastIndex;
+            }
+            catch
+            {
+                // Ignore occasional scroll index races while resizing.
+            }
+        }
     }
 
     private static bool IsRawDataMessage(string message)

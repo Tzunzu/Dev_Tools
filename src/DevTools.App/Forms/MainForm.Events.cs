@@ -1,4 +1,5 @@
 using System;
+using DevTools.App.Infrastructure.UI;
 using System.Windows.Forms;
 
 namespace DevTools.App.Forms;
@@ -31,5 +32,12 @@ internal sealed partial class MainForm
         statusTextLabel.Text = "Selected: " + selectedText;
         ShowSelectedTool(selectedText);
         Console.WriteLine("Navigation changed to '" + selectedText + "'.");
+    }
+
+    private void darkModeMenuItem_Click(object? sender, EventArgs e)
+    {
+        var mode = darkModeMenuItem.Checked ? ThemeMode.Dark : ThemeMode.Light;
+        AppTheme.SetMode(mode);
+        statusTextLabel.Text = darkModeMenuItem.Checked ? "Theme: Dark" : "Theme: Light";
     }
 }

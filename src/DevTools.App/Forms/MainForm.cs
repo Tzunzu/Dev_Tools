@@ -14,7 +14,9 @@ internal sealed partial class MainForm : Form
     public MainForm()
     {
         InitializeComponent();
-        AppTheme.Apply(this);
+        AppTheme.ThemeChanged += AppTheme_ThemeChanged;
+        darkModeMenuItem.Checked = AppTheme.CurrentMode == ThemeMode.Dark;
+        ApplyThemeToWorkspace();
         InitializeToolWorkspace();
 
         originalOut = Console.Out;
@@ -26,10 +28,51 @@ internal sealed partial class MainForm : Form
         AddOutput("Application started.");
     }
 
+    private void ApplyThemeToWorkspace()
+    {
+        AppTheme.Apply(this);
+
+        if (welcomeView is not null && !welcomeView.IsDisposed)
+        {
+            AppTheme.Apply(welcomeView);
+        }
+
+        foreach (var view in toolViewCache.Values)
+        {
+            if (!view.IsDisposed)
+            {
+                AppTheme.Apply(view);
+            }
+        }
+    }
+
     protected override void OnFormClosed(FormClosedEventArgs e)
     {
+        AppTheme.ThemeChanged -= AppTheme_ThemeChanged;
         Console.SetOut(originalOut);
         Console.SetError(originalError);
         base.OnFormClosed(e);
+    }
+
+    private void AppTheme_ThemeChanged(ThemeOptions options)
+    {
+        if (IsDisposed)
+        {
+            return;
+        }
+
+        if (InvokeRequired)
+        {
+            BeginInvoke(() => ApplyThemeFromOptions(options));
+            return;
+        }
+
+        ApplyThemeFromOptions(options);
+    }
+
+    private void ApplyThemeFromOptions(ThemeOptions options)
+    {
+        darkModeMenuItem.Checked = options.Mode == ThemeMode.Dark;
+        ApplyThemeToWorkspace();
     }
 }

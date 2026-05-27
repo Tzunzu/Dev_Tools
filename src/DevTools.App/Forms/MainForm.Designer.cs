@@ -1,4 +1,5 @@
 using System.Windows.Forms;
+using DevTools.App.Infrastructure.UI;
 
 namespace DevTools.App.Forms;
 
@@ -7,6 +8,8 @@ internal sealed partial class MainForm
     private MenuStrip mainMenu = null!;
     private ToolStripMenuItem fileMenuItem = null!;
     private ToolStripMenuItem exitMenuItem = null!;
+    private ToolStripMenuItem viewMenuItem = null!;
+    private ToolStripMenuItem darkModeMenuItem = null!;
     private ToolStripMenuItem helpMenuItem = null!;
     private ToolStripMenuItem aboutMenuItem = null!;
     private StatusStrip mainStatusStrip = null!;
@@ -15,21 +18,23 @@ internal sealed partial class MainForm
     private SplitContainer contentSplitContainer = null!;
     private TreeView navigationTree = null!;
     private GroupBox workAreaGroup = null!;
-    private Panel workAreaHostPanel = null!;
+    private ThemedScrollPanel workAreaHostPanel = null!;
     private GroupBox outputGroup = null!;
     private TabControl outputTabControl = null!;
     private TabPage outputEventsTabPage = null!;
     private TabPage outputRawDataTabPage = null!;
-    private ListView outputListView = null!;
+    private DataGridView outputEventsGrid = null!;
     private RichTextBox outputRawDataRichTextBox = null!;
-    private ColumnHeader outputTimeColumn = null!;
-    private ColumnHeader outputEventColumn = null!;
+    private DataGridViewTextBoxColumn outputTimeColumn = null!;
+    private DataGridViewTextBoxColumn outputEventColumn = null!;
 
     private void InitializeComponent()
     {
         mainMenu = new MenuStrip();
         fileMenuItem = new ToolStripMenuItem();
         exitMenuItem = new ToolStripMenuItem();
+        viewMenuItem = new ToolStripMenuItem();
+        darkModeMenuItem = new ToolStripMenuItem();
         helpMenuItem = new ToolStripMenuItem();
         aboutMenuItem = new ToolStripMenuItem();
         mainStatusStrip = new StatusStrip();
@@ -38,15 +43,15 @@ internal sealed partial class MainForm
         navigationTree = new TreeView();
         contentSplitContainer = new SplitContainer();
         workAreaGroup = new GroupBox();
-        workAreaHostPanel = new Panel();
+        workAreaHostPanel = new ThemedScrollPanel();
         outputGroup = new GroupBox();
         outputTabControl = new TabControl();
         outputEventsTabPage = new TabPage();
         outputRawDataTabPage = new TabPage();
-        outputListView = new ListView();
+        outputEventsGrid = new ThemedDataGridView();
         outputRawDataRichTextBox = new RichTextBox();
-        outputTimeColumn = new ColumnHeader();
-        outputEventColumn = new ColumnHeader();
+        outputTimeColumn = new DataGridViewTextBoxColumn();
+        outputEventColumn = new DataGridViewTextBoxColumn();
         mainMenu.SuspendLayout();
         mainStatusStrip.SuspendLayout();
         ((System.ComponentModel.ISupportInitialize)mainSplitContainer).BeginInit();
@@ -57,6 +62,7 @@ internal sealed partial class MainForm
         contentSplitContainer.Panel1.SuspendLayout();
         contentSplitContainer.Panel2.SuspendLayout();
         contentSplitContainer.SuspendLayout();
+        ((System.ComponentModel.ISupportInitialize)outputEventsGrid).BeginInit();
         workAreaGroup.SuspendLayout();
         outputTabControl.SuspendLayout();
         outputEventsTabPage.SuspendLayout();
@@ -66,7 +72,7 @@ internal sealed partial class MainForm
         // 
         // mainMenu
         // 
-        mainMenu.Items.AddRange(new ToolStripItem[] { fileMenuItem, helpMenuItem });
+        mainMenu.Items.AddRange(new ToolStripItem[] { fileMenuItem, viewMenuItem, helpMenuItem });
         mainMenu.Location = new System.Drawing.Point(0, 0);
         mainMenu.Name = "mainMenu";
         mainMenu.Size = new System.Drawing.Size(1000, 24);
@@ -86,6 +92,21 @@ internal sealed partial class MainForm
         exitMenuItem.Size = new System.Drawing.Size(93, 22);
         exitMenuItem.Text = "Exit";
         exitMenuItem.Click += exitMenuItem_Click;
+        // 
+        // viewMenuItem
+        // 
+        viewMenuItem.DropDownItems.AddRange(new ToolStripItem[] { darkModeMenuItem });
+        viewMenuItem.Name = "viewMenuItem";
+        viewMenuItem.Size = new System.Drawing.Size(44, 20);
+        viewMenuItem.Text = "View";
+        // 
+        // darkModeMenuItem
+        // 
+        darkModeMenuItem.CheckOnClick = true;
+        darkModeMenuItem.Name = "darkModeMenuItem";
+        darkModeMenuItem.Size = new System.Drawing.Size(180, 22);
+        darkModeMenuItem.Text = "Dark Mode";
+        darkModeMenuItem.Click += darkModeMenuItem_Click;
         // 
         // helpMenuItem
         // 
@@ -130,12 +151,16 @@ internal sealed partial class MainForm
         // 
         mainSplitContainer.Panel2.Controls.Add(contentSplitContainer);
         mainSplitContainer.Size = new System.Drawing.Size(1000, 604);
-        mainSplitContainer.SplitterDistance = 260;
+        mainSplitContainer.SplitterDistance = 180;
         mainSplitContainer.TabIndex = 1;
         // 
         // navigationTree
         // 
         navigationTree.Dock = DockStyle.Fill;
+        navigationTree.FullRowSelect = true;
+        navigationTree.HideSelection = false;
+        navigationTree.HotTracking = true;
+        navigationTree.Indent = 16;
         navigationTree.Location = new System.Drawing.Point(0, 0);
         navigationTree.Name = "navigationTree";
         navigationTree.Nodes.AddRange(new TreeNode[]
@@ -151,6 +176,9 @@ internal sealed partial class MainForm
             new TreeNode("Help")
         });
         navigationTree.Size = new System.Drawing.Size(260, 604);
+        navigationTree.ShowLines = false;
+        navigationTree.ShowPlusMinus = false;
+        navigationTree.ShowRootLines = false;
         navigationTree.TabIndex = 0;
         navigationTree.AfterSelect += navigationTree_AfterSelect;
         // 
@@ -178,7 +206,7 @@ internal sealed partial class MainForm
         workAreaGroup.Dock = DockStyle.Fill;
         workAreaGroup.Location = new System.Drawing.Point(0, 0);
         workAreaGroup.Name = "workAreaGroup";
-        workAreaGroup.Padding = new Padding(16);
+        workAreaGroup.Padding = new Padding(12);
         workAreaGroup.Size = new System.Drawing.Size(736, 340);
         workAreaGroup.TabIndex = 0;
         workAreaGroup.TabStop = false;
@@ -187,9 +215,9 @@ internal sealed partial class MainForm
         // workAreaHostPanel
         // 
         workAreaHostPanel.Dock = DockStyle.Fill;
-        workAreaHostPanel.Location = new System.Drawing.Point(16, 32);
+        workAreaHostPanel.Location = new System.Drawing.Point(12, 28);
         workAreaHostPanel.Name = "workAreaHostPanel";
-        workAreaHostPanel.Size = new System.Drawing.Size(704, 292);
+        workAreaHostPanel.Size = new System.Drawing.Size(712, 296);
         workAreaHostPanel.TabIndex = 0;
         // 
         // outputGroup
@@ -198,7 +226,7 @@ internal sealed partial class MainForm
         outputGroup.Dock = DockStyle.Fill;
         outputGroup.Location = new System.Drawing.Point(0, 0);
         outputGroup.Name = "outputGroup";
-        outputGroup.Padding = new Padding(8);
+        outputGroup.Padding = new Padding(10);
         outputGroup.Size = new System.Drawing.Size(736, 260);
         outputGroup.TabIndex = 0;
         outputGroup.TabStop = false;
@@ -209,18 +237,18 @@ internal sealed partial class MainForm
         outputTabControl.Controls.Add(outputEventsTabPage);
         outputTabControl.Controls.Add(outputRawDataTabPage);
         outputTabControl.Dock = DockStyle.Fill;
-        outputTabControl.Location = new System.Drawing.Point(8, 24);
+        outputTabControl.Location = new System.Drawing.Point(10, 26);
         outputTabControl.Name = "outputTabControl";
         outputTabControl.SelectedIndex = 0;
-        outputTabControl.Size = new System.Drawing.Size(720, 228);
+        outputTabControl.Size = new System.Drawing.Size(716, 224);
         outputTabControl.TabIndex = 0;
         // 
         // outputEventsTabPage
         // 
-        outputEventsTabPage.Controls.Add(outputListView);
+        outputEventsTabPage.Controls.Add(outputEventsGrid);
         outputEventsTabPage.Location = new System.Drawing.Point(4, 24);
         outputEventsTabPage.Name = "outputEventsTabPage";
-        outputEventsTabPage.Padding = new Padding(3);
+        outputEventsTabPage.Padding = new Padding(6);
         outputEventsTabPage.Size = new System.Drawing.Size(712, 200);
         outputEventsTabPage.TabIndex = 0;
         outputEventsTabPage.Text = "Events";
@@ -231,26 +259,30 @@ internal sealed partial class MainForm
         outputRawDataTabPage.Controls.Add(outputRawDataRichTextBox);
         outputRawDataTabPage.Location = new System.Drawing.Point(4, 24);
         outputRawDataTabPage.Name = "outputRawDataTabPage";
-        outputRawDataTabPage.Padding = new Padding(3);
+        outputRawDataTabPage.Padding = new Padding(6);
         outputRawDataTabPage.Size = new System.Drawing.Size(712, 200);
         outputRawDataTabPage.TabIndex = 1;
         outputRawDataTabPage.Text = "Raw data";
         outputRawDataTabPage.UseVisualStyleBackColor = true;
         // 
-        // outputListView
+        // outputEventsGrid
         // 
-        outputListView.Columns.AddRange(new ColumnHeader[] { outputTimeColumn, outputEventColumn });
-        outputListView.Dock = DockStyle.Fill;
-        outputListView.FullRowSelect = true;
-        outputListView.GridLines = true;
-        outputListView.HeaderStyle = ColumnHeaderStyle.Nonclickable;
-        outputListView.Location = new System.Drawing.Point(3, 3);
-        outputListView.MultiSelect = false;
-        outputListView.Name = "outputListView";
-        outputListView.Size = new System.Drawing.Size(706, 194);
-        outputListView.TabIndex = 0;
-        outputListView.UseCompatibleStateImageBehavior = false;
-        outputListView.View = View.Details;
+        outputEventsGrid.AllowUserToAddRows = false;
+        outputEventsGrid.AllowUserToDeleteRows = false;
+        outputEventsGrid.AllowUserToResizeRows = false;
+        outputEventsGrid.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
+        outputEventsGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+        outputEventsGrid.Columns.AddRange(new DataGridViewColumn[] { outputTimeColumn, outputEventColumn });
+        outputEventsGrid.Dock = DockStyle.Fill;
+        outputEventsGrid.EditMode = DataGridViewEditMode.EditProgrammatically;
+        outputEventsGrid.Location = new System.Drawing.Point(3, 3);
+        outputEventsGrid.MultiSelect = false;
+        outputEventsGrid.Name = "outputEventsGrid";
+        outputEventsGrid.ReadOnly = true;
+        outputEventsGrid.RowHeadersVisible = false;
+        outputEventsGrid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+        outputEventsGrid.Size = new System.Drawing.Size(706, 194);
+        outputEventsGrid.TabIndex = 0;
         // 
         // outputRawDataRichTextBox
         // 
@@ -267,13 +299,21 @@ internal sealed partial class MainForm
         // 
         // outputTimeColumn
         // 
-        outputTimeColumn.Text = "Time";
-        outputTimeColumn.Width = 140;
+        outputTimeColumn.HeaderText = "Time";
+        outputTimeColumn.MinimumWidth = 6;
+        outputTimeColumn.Name = "outputTimeColumn";
+        outputTimeColumn.ReadOnly = true;
+        outputTimeColumn.SortMode = DataGridViewColumnSortMode.NotSortable;
+        outputTimeColumn.Width = 120;
         // 
         // outputEventColumn
         // 
-        outputEventColumn.Text = "Event";
-        outputEventColumn.Width = 540;
+        outputEventColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+        outputEventColumn.HeaderText = "Event";
+        outputEventColumn.MinimumWidth = 120;
+        outputEventColumn.Name = "outputEventColumn";
+        outputEventColumn.ReadOnly = true;
+        outputEventColumn.SortMode = DataGridViewColumnSortMode.NotSortable;
         // 
         // MainForm
         // 
@@ -306,6 +346,7 @@ internal sealed partial class MainForm
         outputTabControl.ResumeLayout(false);
         outputEventsTabPage.ResumeLayout(false);
         outputRawDataTabPage.ResumeLayout(false);
+        ((System.ComponentModel.ISupportInitialize)outputEventsGrid).EndInit();
         outputGroup.ResumeLayout(false);
         ResumeLayout(false);
         PerformLayout();

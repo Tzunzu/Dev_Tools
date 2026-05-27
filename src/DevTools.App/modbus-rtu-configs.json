@@ -1,0 +1,19 @@
+[
+  {
+    "Name": "Default",
+    "PollRateMs": 1000,
+    "Slaves": [
+      {
+        "SlaveId": 1,
+        "FunctionCode": 3,
+        "StartRegister": 0,
+        "RegisterCount": 10,
+        "PollRateMs": 1000,
+        "RegisterNumberFormat": "Decimal",
+        "RegisterValueDataType": "UInt",
+        "ShowDescriptionColumn": false,
+        "Descriptions": {}
+      }
+    ]
+  }
+]

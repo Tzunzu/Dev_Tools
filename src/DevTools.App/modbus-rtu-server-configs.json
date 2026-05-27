@@ -1,0 +1,119 @@
+[
+  {
+    "Name": "Test",
+    "PortName": "COM3",
+    "BaudRate": 19200,
+    "Frame": "8N1",
+    "UnitId": 1,
+    "RtsEnable": false,
+    "DtrEnable": false,
+    "Cards": [
+      {
+        "Area": "HoldingRegisters",
+        "StartAddress": 0,
+        "Count": 16,
+        "ShowDescriptionColumn": true,
+        "Descriptions": {
+          "0": "Start"
+        },
+        "RegisterValues": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "BooleanValues": []
+      },
+      {
+        "Area": "InputRegisters",
+        "StartAddress": 0,
+        "Count": 16,
+        "ShowDescriptionColumn": false,
+        "Descriptions": {},
+        "RegisterValues": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "BooleanValues": []
+      },
+      {
+        "Area": "DiscreteInputs",
+        "StartAddress": 0,
+        "Count": 16,
+        "ShowDescriptionColumn": false,
+        "Descriptions": {},
+        "RegisterValues": [],
+        "BooleanValues": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ]
+      },
+      {
+        "Area": "Coils",
+        "StartAddress": 0,
+        "Count": 16,
+        "ShowDescriptionColumn": false,
+        "Descriptions": {},
+        "RegisterValues": [],
+        "BooleanValues": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ]
+      }
+    ]
+  }
+]
