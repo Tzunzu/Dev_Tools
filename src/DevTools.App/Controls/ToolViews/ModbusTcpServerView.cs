@@ -68,14 +68,14 @@ internal sealed class ModbusTcpServerView : UserControl
             RowCount = 2
         };
         rootLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-        rootLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 72F));
+        rootLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, AppTheme.SectionHeaderHeight));
         rootLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
 
         connectionGroup = new GroupBox
         {
             Dock = DockStyle.Fill,
-            Margin = new Padding(0, 0, 0, 8),
-            Padding = new Padding(10, 8, 10, 8),
+            Margin = AppTheme.WorkspaceGroupMargin,
+            Padding = AppTheme.WorkspaceGroupPadding,
             Text = "TCP Server"
         };
 
@@ -96,9 +96,9 @@ internal sealed class ModbusTcpServerView : UserControl
         portTextBox = new TextBox { Text = "502" };
         unitIdTextBox = new TextBox { Text = "1" };
 
-        var bindField = BuildLabeledField("Bind", bindAddressTextBox, 176);
-        var portField = BuildLabeledField("Port", portTextBox, 72);
-        var unitIdField = BuildLabeledField("ID", unitIdTextBox, 56);
+        var bindField = ModbusViewControlFactory.CreateLabeledField("Bind", bindAddressTextBox, 176);
+        var portField = ModbusViewControlFactory.CreateLabeledField("Port", portTextBox, 72);
+        var unitIdField = ModbusViewControlFactory.CreateLabeledField("ID", unitIdTextBox, 56);
 
         startServerButton = new Button
         {
@@ -125,7 +125,7 @@ internal sealed class ModbusTcpServerView : UserControl
         mapsGroup = new GroupBox
         {
             Dock = DockStyle.Fill,
-            Padding = new Padding(10, 8, 10, 8),
+            Padding = AppTheme.WorkspaceGroupPadding,
             Text = "Register Maps"
         };
 
@@ -136,42 +136,30 @@ internal sealed class ModbusTcpServerView : UserControl
             RowCount = 2
         };
         mapsLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-        mapsLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 34F));
+        mapsLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, AppTheme.ToolbarRowHeight));
         mapsLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
 
-        mapsToolbar = new FlowLayoutPanel
-        {
-            Dock = DockStyle.Fill,
-            FlowDirection = FlowDirection.LeftToRight,
-            Margin = new Padding(0),
-            WrapContents = false
-        };
+        mapsToolbar = ModbusViewControlFactory.CreateToolbarPanel();
 
-        seedDataButton = new Button { Margin = new Padding(0, 3, 8, 3), Size = new Size(92, 27), Text = "Seed Data" };
+        seedDataButton = ModbusViewControlFactory.CreateToolbarButton("Seed Data");
         seedDataButton.Click += seedDataButton_Click;
 
-        clearDataButton = new Button { Margin = new Padding(0, 3, 8, 3), Size = new Size(92, 27), Text = "Clear Data" };
+        clearDataButton = ModbusViewControlFactory.CreateToolbarButton("Clear Data");
         clearDataButton.Click += clearDataButton_Click;
 
-        saveConfigButton = new Button { Margin = new Padding(0, 3, 8, 3), Size = new Size(92, 27), Text = "Save Config" };
+        saveConfigButton = ModbusViewControlFactory.CreateToolbarButton("Save Config");
         saveConfigButton.Click += saveConfigButton_Click;
 
-        updateConfigButton = new Button { Enabled = false, Margin = new Padding(0, 3, 8, 3), Size = new Size(100, 27), Text = "Update Config" };
+        updateConfigButton = ModbusViewControlFactory.CreateToolbarButton("Update Config", ToolbarButtonVariant.Wide, enabled: false);
         updateConfigButton.Click += updateConfigButton_Click;
 
-        configPresetComboBox = new ComboBox
-        {
-            DropDownStyle = ComboBoxStyle.DropDownList,
-            FormattingEnabled = true,
-            Margin = new Padding(0, 4, 0, 3),
-            Size = new Size(130, 23)
-        };
+        configPresetComboBox = ModbusViewControlFactory.CreatePresetComboBox();
         configPresetComboBox.SelectedIndexChanged += configPresetComboBox_SelectedIndexChanged;
 
-        renameConfigButton = new Button { Enabled = false, Margin = new Padding(8, 3, 6, 3), Size = new Size(66, 27), Text = "Rename" };
+        renameConfigButton = ModbusViewControlFactory.CreateToolbarButton("Rename", ToolbarButtonVariant.Trailing, enabled: false);
         renameConfigButton.Click += renameConfigButton_Click;
 
-        deleteConfigButton = new Button { Enabled = false, Margin = new Padding(0, 3, 0, 3), Size = new Size(60, 27), Text = "Delete" };
+        deleteConfigButton = ModbusViewControlFactory.CreateToolbarButton("Delete", ToolbarButtonVariant.Last, enabled: false);
         deleteConfigButton.Click += deleteConfigButton_Click;
 
         mapsToolbar.Controls.Add(seedDataButton);
@@ -240,7 +228,7 @@ internal sealed class ModbusTcpServerView : UserControl
 
     private TcpMapCard CreateCard(string title, string areaKey, MapCardKind kind, int startAddress, int pointCount)
     {
-        var group = new GroupBox { ForeColor = Color.FromArgb(51, 65, 85), Margin = new Padding(0, 0, 6, 0), Padding = new Padding(6), Text = title };
+        var group = new GroupBox { ForeColor = Color.FromArgb(51, 65, 85), Margin = AppTheme.CardGroupMargin, Padding = AppTheme.CardGroupPadding, Text = title };
         var rootPanel = new TableLayoutPanel { ColumnCount = 1, Dock = DockStyle.Fill, Margin = new Padding(0), RowCount = 2 };
         rootPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
         rootPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 56F));
@@ -258,14 +246,9 @@ internal sealed class ModbusTcpServerView : UserControl
 
         var startTextBox = new TextBox { Text = startAddress.ToString(CultureInfo.InvariantCulture) };
         var countTextBox = new TextBox { Text = pointCount.ToString(CultureInfo.InvariantCulture) };
-        var startField = BuildLabeledField("Start", startTextBox, 62);
-        var countField = BuildLabeledField("Count", countTextBox, 62);
-        var applyButton = new Button
-        {
-            Margin = new Padding(8, 2, 0, 0),
-            Size = new Size(64, 27),
-            Text = "Apply"
-        };
+        var startField = ModbusViewControlFactory.CreateLabeledField("Start", startTextBox, 62);
+        var countField = ModbusViewControlFactory.CreateLabeledField("Count", countTextBox, 62);
+        var applyButton = ModbusViewControlFactory.CreateCardApplyButton();
 
         headerPanel.Controls.Add(startField);
         headerPanel.Controls.Add(countField);
@@ -478,33 +461,6 @@ internal sealed class ModbusTcpServerView : UserControl
         bindAddressTextBox.Enabled = !running;
         portTextBox.Enabled = !running;
         unitIdTextBox.Enabled = !running;
-    }
-
-    private static Control BuildLabeledField(string labelText, TextBox textBox, int textWidth)
-    {
-        var panel = new FlowLayoutPanel
-        {
-            AutoSize = true,
-            AutoSizeMode = AutoSizeMode.GrowAndShrink,
-            Dock = DockStyle.Fill,
-            FlowDirection = FlowDirection.LeftToRight,
-            Margin = new Padding(0),
-            WrapContents = false
-        };
-
-        var label = new Label
-        {
-            AutoSize = true,
-            Margin = new Padding(0, 6, 6, 0),
-            Text = labelText
-        };
-
-        textBox.Margin = new Padding(0, 2, 0, 0);
-        textBox.Width = textWidth;
-
-        panel.Controls.Add(label);
-        panel.Controls.Add(textBox);
-        return panel;
     }
 
     private static bool TryParseBindAddress(string input, out IPAddress address)

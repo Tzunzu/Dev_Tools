@@ -207,6 +207,7 @@ internal sealed partial class MainForm
         workAreaGroup.Location = new System.Drawing.Point(0, 0);
         workAreaGroup.Name = "workAreaGroup";
         workAreaGroup.Padding = new Padding(12);
+            workAreaGroup.Padding = AppTheme.WorkspaceGroupPadding;
         workAreaGroup.Size = new System.Drawing.Size(736, 340);
         workAreaGroup.TabIndex = 0;
         workAreaGroup.TabStop = false;
@@ -216,8 +217,10 @@ internal sealed partial class MainForm
         // 
         workAreaHostPanel.Dock = DockStyle.Fill;
         workAreaHostPanel.Location = new System.Drawing.Point(12, 28);
+            workAreaHostPanel.Location = new System.Drawing.Point(12, 30);
         workAreaHostPanel.Name = "workAreaHostPanel";
         workAreaHostPanel.Size = new System.Drawing.Size(712, 296);
+            workAreaHostPanel.Size = new System.Drawing.Size(712, 294);
         workAreaHostPanel.TabIndex = 0;
         // 
         // outputGroup
@@ -227,6 +230,7 @@ internal sealed partial class MainForm
         outputGroup.Location = new System.Drawing.Point(0, 0);
         outputGroup.Name = "outputGroup";
         outputGroup.Padding = new Padding(10);
+            outputGroup.Padding = AppTheme.WorkspaceGroupPadding;
         outputGroup.Size = new System.Drawing.Size(736, 260);
         outputGroup.TabIndex = 0;
         outputGroup.TabStop = false;
@@ -238,9 +242,11 @@ internal sealed partial class MainForm
         outputTabControl.Controls.Add(outputRawDataTabPage);
         outputTabControl.Dock = DockStyle.Fill;
         outputTabControl.Location = new System.Drawing.Point(10, 26);
+            outputTabControl.Location = new System.Drawing.Point(12, 30);
         outputTabControl.Name = "outputTabControl";
         outputTabControl.SelectedIndex = 0;
         outputTabControl.Size = new System.Drawing.Size(716, 224);
+            outputTabControl.Size = new System.Drawing.Size(712, 218);
         outputTabControl.TabIndex = 0;
         // 
         // outputEventsTabPage

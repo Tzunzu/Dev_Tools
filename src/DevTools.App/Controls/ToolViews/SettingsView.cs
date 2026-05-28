@@ -20,17 +20,18 @@ internal sealed class SettingsView : UserControl
             ColumnCount = 1,
             Dock = DockStyle.Fill,
             Margin = new Padding(0),
+            Padding = AppTheme.PagePadding,
             RowCount = 2
         };
         root.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-        root.RowStyles.Add(new RowStyle(SizeType.Absolute, 92F));
+        root.RowStyles.Add(new RowStyle(SizeType.Absolute, 52F));
         root.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
 
         var title = new Label
         {
             AutoSize = true,
             Font = new Font("Segoe UI", 12F, FontStyle.Bold),
-            Margin = new Padding(8, 8, 8, 4),
+            Margin = new Padding(0, 0, 0, 8),
             Text = "Appearance"
         };
 
@@ -38,8 +39,8 @@ internal sealed class SettingsView : UserControl
         {
             Dock = DockStyle.Top,
             Height = 130,
-            Margin = new Padding(8, 4, 8, 8),
-            Padding = new Padding(12, 10, 12, 12),
+            Margin = new Padding(0),
+            Padding = AppTheme.WorkspaceGroupPadding,
             Text = "Theme"
         };
 

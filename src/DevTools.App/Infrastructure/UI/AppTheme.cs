@@ -24,6 +24,28 @@ internal static class AppTheme
     private static readonly Font UiFont = new("Segoe UI", 9F);
     private static readonly Font UiFontBold = new("Segoe UI Semibold", 9F, FontStyle.Bold);
     private static readonly Font UiSectionFont = new("Segoe UI Semibold", 9.5F, FontStyle.Bold);
+    public static Padding WorkspaceGroupPadding => new(12, 10, 12, 12);
+    public static Padding WorkspaceGroupMargin => new(0, 0, 0, 10);
+    public static Padding PagePadding => new(12);
+    public static Padding InlineFieldLabelMargin => new(0, 5, 6, 0);
+    public static Padding InlineFieldInputMargin => new(0, 1, 0, 0);
+    public static Padding ToolbarButtonMargin => new(0, 4, 8, 4);
+    public static Padding ToolbarTrailingButtonMargin => new(8, 4, 6, 4);
+    public static Padding ToolbarLastButtonMargin => new(0, 4, 0, 4);
+    public static Padding ToolbarComboMargin => new(0, 5, 0, 4);
+    public static Padding CardGroupMargin => new(0, 0, 6, 0);
+    public static Padding CardGroupPadding => new(6);
+    public static Padding CardApplyButtonMargin => new(8, 2, 0, 0);
+    public static Size ToolbarButtonSize => new(92, 27);
+    public static Size ToolbarWideButtonSize => new(100, 27);
+    public static Size ToolbarRenameButtonSize => new(66, 27);
+    public static Size ToolbarDeleteButtonSize => new(60, 27);
+    public static Size ToolbarPresetSize => new(130, 23);
+    public static Size CardApplyButtonSize => new(64, 27);
+    public static Size ConnectionPrimaryButtonSize => new(96, 28);
+    public static Size ConnectionSecondaryButtonSize => new(84, 28);
+    public static int ToolbarRowHeight => 36;
+    public static int SectionHeaderHeight => 76;
 
     private static ThemeOptions options = new(ThemeMode.Dark, true);
 

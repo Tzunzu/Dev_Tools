@@ -87,7 +87,7 @@ internal sealed partial class ModbusRtuClientView
         rootLayout.Location = new Point(0, 0);
         rootLayout.Name = "rootLayout";
         rootLayout.RowCount = 2;
-        rootLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 72F));
+        rootLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, AppTheme.SectionHeaderHeight));
         rootLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
         rootLayout.Size = new Size(704, 292);
         rootLayout.TabIndex = 0;
@@ -97,9 +97,9 @@ internal sealed partial class ModbusRtuClientView
         connectionGroup.Controls.Add(connectionLayout);
         connectionGroup.Dock = DockStyle.Fill;
         connectionGroup.Location = new Point(0, 0);
-        connectionGroup.Margin = new Padding(0, 0, 0, 8);
+        connectionGroup.Margin = AppTheme.WorkspaceGroupMargin;
         connectionGroup.Name = "connectionGroup";
-        connectionGroup.Padding = new Padding(10, 8, 10, 8);
+        connectionGroup.Padding = AppTheme.WorkspaceGroupPadding;
         connectionGroup.Size = new Size(704, 72);
         connectionGroup.TabIndex = 0;
         connectionGroup.TabStop = false;
@@ -311,7 +311,7 @@ internal sealed partial class ModbusRtuClientView
         requestGroup.Dock = DockStyle.Fill;
         requestGroup.Location = new Point(0, 0);
         requestGroup.Name = "requestGroup";
-        requestGroup.Padding = new Padding(10, 8, 10, 8);
+        requestGroup.Padding = AppTheme.WorkspaceGroupPadding;
         requestGroup.Size = new Size(704, 128);
         requestGroup.TabIndex = 0;
         requestGroup.TabStop = false;
@@ -327,7 +327,7 @@ internal sealed partial class ModbusRtuClientView
         requestRootLayout.Location = new Point(10, 24);
         requestRootLayout.Name = "requestRootLayout";
         requestRootLayout.RowCount = 2;
-        requestRootLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 34F));
+        requestRootLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, AppTheme.ToolbarRowHeight));
         requestRootLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
         requestRootLayout.Size = new Size(684, 96);
         requestRootLayout.TabIndex = 0;
@@ -353,9 +353,9 @@ internal sealed partial class ModbusRtuClientView
         // addSlaveButton
         // 
         addSlaveButton.Location = new Point(0, 3);
-        addSlaveButton.Margin = new Padding(0, 3, 12, 3);
+        addSlaveButton.Margin = AppTheme.ToolbarButtonMargin;
         addSlaveButton.Name = "addSlaveButton";
-        addSlaveButton.Size = new Size(92, 27);
+        addSlaveButton.Size = AppTheme.ToolbarButtonSize;
         addSlaveButton.TabIndex = 1;
         addSlaveButton.Text = "Add Slave";
         addSlaveButton.UseVisualStyleBackColor = true;
@@ -365,9 +365,9 @@ internal sealed partial class ModbusRtuClientView
         // 
         pollButton.Enabled = false;
         pollButton.Location = new Point(104, 3);
-        pollButton.Margin = new Padding(0, 3, 8, 3);
+        pollButton.Margin = AppTheme.ToolbarButtonMargin;
         pollButton.Name = "pollButton";
-        pollButton.Size = new Size(92, 27);
+        pollButton.Size = AppTheme.ToolbarButtonSize;
         pollButton.TabIndex = 2;
         pollButton.Text = "Start Poll";
         pollButton.UseVisualStyleBackColor = true;
@@ -376,9 +376,9 @@ internal sealed partial class ModbusRtuClientView
         // saveConfigButton
         // 
         saveConfigButton.Location = new Point(196, 3);
-        saveConfigButton.Margin = new Padding(0, 3, 8, 3);
+        saveConfigButton.Margin = AppTheme.ToolbarButtonMargin;
         saveConfigButton.Name = "saveConfigButton";
-        saveConfigButton.Size = new Size(92, 27);
+        saveConfigButton.Size = AppTheme.ToolbarButtonSize;
         saveConfigButton.TabIndex = 3;
         saveConfigButton.Text = "Save Config";
         saveConfigButton.UseVisualStyleBackColor = true;
@@ -388,9 +388,9 @@ internal sealed partial class ModbusRtuClientView
         // 
         updateConfigButton.Enabled = false;
         updateConfigButton.Location = new Point(296, 3);
-        updateConfigButton.Margin = new Padding(0, 3, 8, 3);
+        updateConfigButton.Margin = AppTheme.ToolbarButtonMargin;
         updateConfigButton.Name = "updateConfigButton";
-        updateConfigButton.Size = new Size(100, 27);
+        updateConfigButton.Size = AppTheme.ToolbarWideButtonSize;
         updateConfigButton.TabIndex = 4;
         updateConfigButton.Text = "Update Config";
         updateConfigButton.UseVisualStyleBackColor = true;
@@ -401,9 +401,9 @@ internal sealed partial class ModbusRtuClientView
         configPresetComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
         configPresetComboBox.FormattingEnabled = true;
         configPresetComboBox.Location = new Point(404, 4);
-        configPresetComboBox.Margin = new Padding(0, 4, 0, 3);
+        configPresetComboBox.Margin = AppTheme.ToolbarComboMargin;
         configPresetComboBox.Name = "configPresetComboBox";
-        configPresetComboBox.Size = new Size(130, 23);
+        configPresetComboBox.Size = AppTheme.ToolbarPresetSize;
         configPresetComboBox.TabIndex = 5;
         configPresetComboBox.SelectedIndexChanged += configPresetComboBox_SelectedIndexChanged;
         // 
@@ -411,9 +411,9 @@ internal sealed partial class ModbusRtuClientView
         // 
         renameConfigButton.Enabled = false;
         renameConfigButton.Location = new Point(542, 3);
-        renameConfigButton.Margin = new Padding(8, 3, 6, 3);
+        renameConfigButton.Margin = AppTheme.ToolbarTrailingButtonMargin;
         renameConfigButton.Name = "renameConfigButton";
-        renameConfigButton.Size = new Size(66, 27);
+        renameConfigButton.Size = AppTheme.ToolbarRenameButtonSize;
         renameConfigButton.TabIndex = 6;
         renameConfigButton.Text = "Rename";
         renameConfigButton.UseVisualStyleBackColor = true;
@@ -423,9 +423,9 @@ internal sealed partial class ModbusRtuClientView
         // 
         deleteConfigButton.Enabled = false;
         deleteConfigButton.Location = new Point(614, 3);
-        deleteConfigButton.Margin = new Padding(0, 3, 0, 3);
+        deleteConfigButton.Margin = AppTheme.ToolbarLastButtonMargin;
         deleteConfigButton.Name = "deleteConfigButton";
-        deleteConfigButton.Size = new Size(60, 27);
+        deleteConfigButton.Size = AppTheme.ToolbarDeleteButtonSize;
         deleteConfigButton.TabIndex = 7;
         deleteConfigButton.Text = "Delete";
         deleteConfigButton.UseVisualStyleBackColor = true;

@@ -75,24 +75,40 @@ internal sealed partial class ModbusRtuClientView : UserControl
 
     private void NormalizeConnectionLayout()
     {
-        var portField = BuildLabeledField("Port", portComboBox, 132);
-        var baudField = BuildLabeledField("Baud", baudRateComboBox, 72);
-        var frameField = BuildLabeledField("Frame", frameComboBox, 74);
-        var pollField = BuildLabeledField("Poll ms", pollIntervalTextBox, 58);
+        var portField = ModbusViewControlFactory.CreateLabeledField("Port", portComboBox, 132);
+        var baudField = ModbusViewControlFactory.CreateLabeledField("Baud", baudRateComboBox, 72);
+        var frameField = ModbusViewControlFactory.CreateLabeledField("Frame", frameComboBox, 74);
+        var pollField = ModbusViewControlFactory.CreateLabeledField("Poll ms", pollIntervalTextBox, 58);
 
         connectionLayout.SuspendLayout();
         connectionLayout.Controls.Clear();
         connectionLayout.ColumnStyles.Clear();
+        connectionLayout.RowStyles.Clear();
         connectionLayout.ColumnCount = 9;
+        connectionLayout.RowCount = 1;
         connectionLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 190F));
         connectionLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 130F));
         connectionLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 136F));
         connectionLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 110F));
         connectionLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 48F));
         connectionLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 48F));
-        connectionLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 92F));
-        connectionLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 80F));
+        connectionLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 96F));
+        connectionLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 84F));
         connectionLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+        connectionLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+        connectionLayout.Padding = new Padding(0, 1, 0, 0);
+
+        rtsCheckBox.Margin = new Padding(0);
+        dtrCheckBox.Margin = new Padding(0);
+        connectButton.Dock = DockStyle.None;
+        connectButton.Anchor = AnchorStyles.Left;
+        connectButton.Margin = new Padding(0);
+        connectButton.Size = AppTheme.ConnectionPrimaryButtonSize;
+        refreshPortsButton.Dock = DockStyle.None;
+        refreshPortsButton.Anchor = AnchorStyles.Left;
+        refreshPortsButton.Margin = new Padding(0);
+        refreshPortsButton.Size = AppTheme.ConnectionSecondaryButtonSize;
+        connectionStatusLabel.Margin = new Padding(0);
 
         connectionLayout.Controls.Add(portField, 0, 0);
         connectionLayout.Controls.Add(baudField, 1, 0);
@@ -104,33 +120,6 @@ internal sealed partial class ModbusRtuClientView : UserControl
         connectionLayout.Controls.Add(refreshPortsButton, 7, 0);
         connectionLayout.Controls.Add(connectionStatusLabel, 8, 0);
         connectionLayout.ResumeLayout();
-    }
-
-    private static Control BuildLabeledField(string labelText, Control input, int inputWidth)
-    {
-        var panel = new FlowLayoutPanel
-        {
-            AutoSize = true,
-            AutoSizeMode = AutoSizeMode.GrowAndShrink,
-            Dock = DockStyle.Fill,
-            FlowDirection = FlowDirection.LeftToRight,
-            Margin = new Padding(0),
-            WrapContents = false
-        };
-
-        var label = new Label
-        {
-            AutoSize = true,
-            Margin = new Padding(0, 6, 6, 0),
-            Text = labelText
-        };
-
-        input.Margin = new Padding(0, 2, 0, 0);
-        input.Width = inputWidth;
-
-        panel.Controls.Add(label);
-        panel.Controls.Add(input);
-        return panel;
     }
 
     protected override void Dispose(bool disposing)
@@ -508,11 +497,11 @@ internal sealed partial class ModbusRtuClientView : UserControl
 
         var registerColumn = new DataGridViewTextBoxColumn
         {
-            HeaderText = "Reg #",
+            HeaderText = "Address",
             Name = "registerNumber",
             ReadOnly = true,
             SortMode = DataGridViewColumnSortMode.NotSortable,
-            Width = 48
+            Width = 82
         };
 
         var valueColumn = new DataGridViewTextBoxColumn

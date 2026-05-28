@@ -74,14 +74,14 @@ internal sealed class ModbusRtuServerView : UserControl
             RowCount = 2
         };
         rootLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-        rootLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 72F));
+        rootLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, AppTheme.SectionHeaderHeight));
         rootLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
 
         connectionGroup = new GroupBox
         {
             Dock = DockStyle.Fill,
-            Margin = new Padding(0, 0, 0, 8),
-            Padding = new Padding(10, 8, 10, 8),
+            Margin = AppTheme.WorkspaceGroupMargin,
+            Padding = AppTheme.WorkspaceGroupPadding,
             Text = "RTU Server"
         };
 
@@ -128,10 +128,10 @@ internal sealed class ModbusRtuServerView : UserControl
             Text = "1"
         };
 
-        var portField = BuildLabeledField("Port", portComboBox, 132);
-        var baudField = BuildLabeledField("Baud", baudRateComboBox, 72);
-        var frameField = BuildLabeledField("Frame", frameComboBox, 74);
-        var unitIdField = BuildLabeledField("ID", unitIdTextBox, 56);
+        var portField = ModbusViewControlFactory.CreateLabeledField("Port", portComboBox, 132);
+        var baudField = ModbusViewControlFactory.CreateLabeledField("Baud", baudRateComboBox, 72);
+        var frameField = ModbusViewControlFactory.CreateLabeledField("Frame", frameComboBox, 74);
+        var unitIdField = ModbusViewControlFactory.CreateLabeledField("ID", unitIdTextBox, 56);
 
         rtsCheckBox = new CheckBox { Anchor = AnchorStyles.Left, AutoSize = true, Text = "RTS" };
         dtrCheckBox = new CheckBox { Anchor = AnchorStyles.Left, AutoSize = true, Text = "DTR" };
@@ -172,7 +172,7 @@ internal sealed class ModbusRtuServerView : UserControl
         mapsGroup = new GroupBox
         {
             Dock = DockStyle.Fill,
-            Padding = new Padding(10, 8, 10, 8),
+            Padding = AppTheme.WorkspaceGroupPadding,
             Text = "Register Maps"
         };
 
@@ -183,76 +183,30 @@ internal sealed class ModbusRtuServerView : UserControl
             RowCount = 2
         };
         mapsLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-        mapsLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 34F));
+        mapsLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, AppTheme.ToolbarRowHeight));
         mapsLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
 
-        mapsToolbar = new FlowLayoutPanel
-        {
-            Dock = DockStyle.Fill,
-            FlowDirection = FlowDirection.LeftToRight,
-            Margin = new Padding(0),
-            WrapContents = false
-        };
+        mapsToolbar = ModbusViewControlFactory.CreateToolbarPanel();
 
-        seedDataButton = new Button
-        {
-            Location = new Point(0, 3),
-            Margin = new Padding(0, 3, 8, 3),
-            Size = new Size(92, 27),
-            Text = "Seed Data"
-        };
+        seedDataButton = ModbusViewControlFactory.CreateToolbarButton("Seed Data");
         seedDataButton.Click += seedDataButton_Click;
 
-        clearDataButton = new Button
-        {
-            Margin = new Padding(0, 3, 8, 3),
-            Size = new Size(92, 27),
-            Text = "Clear Data"
-        };
+        clearDataButton = ModbusViewControlFactory.CreateToolbarButton("Clear Data");
         clearDataButton.Click += clearDataButton_Click;
 
-        saveConfigButton = new Button
-        {
-            Margin = new Padding(0, 3, 8, 3),
-            Size = new Size(92, 27),
-            Text = "Save Config"
-        };
+        saveConfigButton = ModbusViewControlFactory.CreateToolbarButton("Save Config");
         saveConfigButton.Click += saveConfigButton_Click;
 
-        updateConfigButton = new Button
-        {
-            Enabled = false,
-            Margin = new Padding(0, 3, 8, 3),
-            Size = new Size(100, 27),
-            Text = "Update Config"
-        };
+        updateConfigButton = ModbusViewControlFactory.CreateToolbarButton("Update Config", ToolbarButtonVariant.Wide, enabled: false);
         updateConfigButton.Click += updateConfigButton_Click;
 
-        configPresetComboBox = new ComboBox
-        {
-            DropDownStyle = ComboBoxStyle.DropDownList,
-            FormattingEnabled = true,
-            Margin = new Padding(0, 4, 0, 3),
-            Size = new Size(130, 23)
-        };
+        configPresetComboBox = ModbusViewControlFactory.CreatePresetComboBox();
         configPresetComboBox.SelectedIndexChanged += configPresetComboBox_SelectedIndexChanged;
 
-        renameConfigButton = new Button
-        {
-            Enabled = false,
-            Margin = new Padding(8, 3, 6, 3),
-            Size = new Size(66, 27),
-            Text = "Rename"
-        };
+        renameConfigButton = ModbusViewControlFactory.CreateToolbarButton("Rename", ToolbarButtonVariant.Trailing, enabled: false);
         renameConfigButton.Click += renameConfigButton_Click;
 
-        deleteConfigButton = new Button
-        {
-            Enabled = false,
-            Margin = new Padding(0, 3, 0, 3),
-            Size = new Size(60, 27),
-            Text = "Delete"
-        };
+        deleteConfigButton = ModbusViewControlFactory.CreateToolbarButton("Delete", ToolbarButtonVariant.Last, enabled: false);
         deleteConfigButton.Click += deleteConfigButton_Click;
 
         mapsToolbar.Controls.Add(seedDataButton);
@@ -329,8 +283,8 @@ internal sealed class ModbusRtuServerView : UserControl
         var group = new GroupBox
         {
             ForeColor = Color.FromArgb(51, 65, 85),
-            Margin = new Padding(0, 0, 6, 0),
-            Padding = new Padding(6),
+            Margin = AppTheme.CardGroupMargin,
+            Padding = AppTheme.CardGroupPadding,
             Text = title
         };
 
@@ -365,14 +319,9 @@ internal sealed class ModbusRtuServerView : UserControl
             Text = pointCount.ToString(CultureInfo.InvariantCulture)
         };
 
-        var startField = BuildLabeledField("Start", startTextBox, 62);
-        var countField = BuildLabeledField("Count", countTextBox, 62);
-        var applyButton = new Button
-        {
-            Margin = new Padding(8, 2, 0, 0),
-            Size = new Size(64, 27),
-            Text = "Apply"
-        };
+        var startField = ModbusViewControlFactory.CreateLabeledField("Start", startTextBox, 62);
+        var countField = ModbusViewControlFactory.CreateLabeledField("Count", countTextBox, 62);
+        var applyButton = ModbusViewControlFactory.CreateCardApplyButton();
 
         headerPanel.Controls.Add(startField);
         headerPanel.Controls.Add(countField);
@@ -924,33 +873,6 @@ internal sealed class ModbusRtuServerView : UserControl
         rtsCheckBox.Enabled = !running;
         dtrCheckBox.Enabled = !running;
         refreshPortsButton.Enabled = !running;
-    }
-
-    private static Control BuildLabeledField(string labelText, Control input, int inputWidth)
-    {
-        var panel = new FlowLayoutPanel
-        {
-            AutoSize = true,
-            AutoSizeMode = AutoSizeMode.GrowAndShrink,
-            Dock = DockStyle.Fill,
-            FlowDirection = FlowDirection.LeftToRight,
-            Margin = new Padding(0),
-            WrapContents = false
-        };
-
-        var label = new Label
-        {
-            AutoSize = true,
-            Margin = new Padding(0, 6, 6, 0),
-            Text = labelText
-        };
-
-        input.Margin = new Padding(0, 2, 0, 0);
-        input.Width = inputWidth;
-
-        panel.Controls.Add(label);
-        panel.Controls.Add(input);
-        return panel;
     }
 
     private void TryUpdateStoreFromCard(ServerMapCard card)

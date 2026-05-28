@@ -1,3 +1,4 @@
+using DevTools.App.Infrastructure.UI;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -14,27 +15,28 @@ internal sealed class WelcomeView : UserControl
             ColumnCount = 1,
             Dock = DockStyle.Fill,
             Margin = new Padding(0),
-            Padding = new Padding(20, 20, 20, 20),
+            Padding = AppTheme.PagePadding,
             RowCount = 2
         };
         root.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-        root.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
+        root.RowStyles.Add(new RowStyle(SizeType.Absolute, 52F));
         root.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
 
         var titleLabel = new Label
         {
             AutoSize = true,
             Font = new Font("Segoe UI Semibold", 16F, FontStyle.Bold),
-            Margin = new Padding(0, 0, 0, 6),
+            Margin = new Padding(0, 0, 0, 8),
             Text = "DevTools"
         };
 
-        var card = new Panel
+        var card = new GroupBox
         {
             Dock = DockStyle.Top,
-            Height = 120,
-            Padding = new Padding(16),
-            Margin = new Padding(0)
+            Height = 132,
+            Padding = AppTheme.WorkspaceGroupPadding,
+            Margin = new Padding(0),
+            Text = ""
         };
 
         var cardTitle = new Label
@@ -48,7 +50,7 @@ internal sealed class WelcomeView : UserControl
         var descriptionLabel = new Label
         {
             AutoSize = true,
-            Location = new Point(0, 30),
+            Location = new Point(0, 32),
             MaximumSize = new Size(760, 0),
             Text = "Choose a tool in the navigation tree to open its workspace.\nUse Settings to tune appearance, density, and theme mode."
         };

@@ -1,5 +1,6 @@
 using System.Drawing;
 using System.Windows.Forms;
+using DevTools.App.Infrastructure.UI;
 
 namespace DevTools.App.Controls.ToolViews;
 
@@ -9,8 +10,8 @@ internal static class ModbusClientSlaveCardFactory
     {
         var group = new GroupBox
         {
-            Margin = new Padding(0, 0, 6, 0),
-            Padding = new Padding(6),
+            Margin = AppTheme.CardGroupMargin,
+            Padding = AppTheme.CardGroupPadding,
             ForeColor = Color.FromArgb(51, 65, 85)
         };
 

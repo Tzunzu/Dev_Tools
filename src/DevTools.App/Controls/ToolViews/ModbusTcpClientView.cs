@@ -67,14 +67,14 @@ internal sealed class ModbusTcpClientView : UserControl
             RowCount = 2
         };
         rootLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-        rootLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 72F));
+        rootLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, AppTheme.SectionHeaderHeight));
         rootLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
 
         connectionGroup = new GroupBox
         {
             Dock = DockStyle.Fill,
-            Margin = new Padding(0, 0, 0, 8),
-            Padding = new Padding(10, 8, 10, 8),
+            Margin = AppTheme.WorkspaceGroupMargin,
+            Padding = AppTheme.WorkspaceGroupPadding,
             Text = "TCP Client"
         };
 
@@ -95,9 +95,9 @@ internal sealed class ModbusTcpClientView : UserControl
         portTextBox = new TextBox { Text = "502" };
         pollIntervalTextBox = new TextBox { Text = "1000" };
 
-        var hostField = BuildLabeledField("Host", hostTextBox, 176);
-        var portField = BuildLabeledField("Port", portTextBox, 72);
-        var pollField = BuildLabeledField("Poll", pollIntervalTextBox, 72);
+        var hostField = ModbusViewControlFactory.CreateLabeledField("Host", hostTextBox, 176);
+        var portField = ModbusViewControlFactory.CreateLabeledField("Port", portTextBox, 72);
+        var pollField = ModbusViewControlFactory.CreateLabeledField("Poll", pollIntervalTextBox, 72);
 
         connectButton = new Button { Dock = DockStyle.Fill, Text = "Connect" };
         connectButton.Click += connectButton_Click;
@@ -120,7 +120,7 @@ internal sealed class ModbusTcpClientView : UserControl
         requestGroup = new GroupBox
         {
             Dock = DockStyle.Fill,
-            Padding = new Padding(10, 8, 10, 8),
+            Padding = AppTheme.WorkspaceGroupPadding,
             Text = "Read Data"
         };
 
@@ -131,42 +131,30 @@ internal sealed class ModbusTcpClientView : UserControl
             RowCount = 2
         };
         requestLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-        requestLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 34F));
+        requestLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, AppTheme.ToolbarRowHeight));
         requestLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
 
-        requestToolbar = new FlowLayoutPanel
-        {
-            Dock = DockStyle.Fill,
-            FlowDirection = FlowDirection.LeftToRight,
-            Margin = new Padding(0),
-            WrapContents = false
-        };
+        requestToolbar = ModbusViewControlFactory.CreateToolbarPanel();
 
-        addSlaveButton = new Button { Margin = new Padding(0, 3, 8, 3), Size = new Size(92, 27), Text = "Add Slave" };
+        addSlaveButton = ModbusViewControlFactory.CreateToolbarButton("Add Slave");
         addSlaveButton.Click += addSlaveButton_Click;
 
-        pollButton = new Button { Margin = new Padding(0, 3, 8, 3), Size = new Size(92, 27), Text = "Start Poll" };
+        pollButton = ModbusViewControlFactory.CreateToolbarButton("Start Poll");
         pollButton.Click += pollButton_Click;
 
-        saveConfigButton = new Button { Margin = new Padding(0, 3, 8, 3), Size = new Size(92, 27), Text = "Save Config" };
+        saveConfigButton = ModbusViewControlFactory.CreateToolbarButton("Save Config");
         saveConfigButton.Click += saveConfigButton_Click;
 
-        updateConfigButton = new Button { Enabled = false, Margin = new Padding(0, 3, 8, 3), Size = new Size(100, 27), Text = "Update Config" };
+        updateConfigButton = ModbusViewControlFactory.CreateToolbarButton("Update Config", ToolbarButtonVariant.Wide, enabled: false);
         updateConfigButton.Click += updateConfigButton_Click;
 
-        configPresetComboBox = new ComboBox
-        {
-            DropDownStyle = ComboBoxStyle.DropDownList,
-            FormattingEnabled = true,
-            Margin = new Padding(0, 4, 0, 3),
-            Size = new Size(130, 23)
-        };
+        configPresetComboBox = ModbusViewControlFactory.CreatePresetComboBox();
         configPresetComboBox.SelectedIndexChanged += configPresetComboBox_SelectedIndexChanged;
 
-        renameConfigButton = new Button { Enabled = false, Margin = new Padding(8, 3, 6, 3), Size = new Size(66, 27), Text = "Rename" };
+        renameConfigButton = ModbusViewControlFactory.CreateToolbarButton("Rename", ToolbarButtonVariant.Trailing, enabled: false);
         renameConfigButton.Click += renameConfigButton_Click;
 
-        deleteConfigButton = new Button { Enabled = false, Margin = new Padding(0, 3, 0, 3), Size = new Size(60, 27), Text = "Delete" };
+        deleteConfigButton = ModbusViewControlFactory.CreateToolbarButton("Delete", ToolbarButtonVariant.Last, enabled: false);
         deleteConfigButton.Click += deleteConfigButton_Click;
 
         requestToolbar.Controls.Add(addSlaveButton);
@@ -248,7 +236,7 @@ internal sealed class ModbusTcpClientView : UserControl
 
     private TcpRequestCard CreateCard(byte unitId, byte functionCode, int startAddress, int pointCount)
     {
-        var cardShell = ModbusClientSlaveCardFactory.Create(functionCode, unitId, startAddress, pointCount, new Padding(0));
+        var cardShell = ModbusClientSlaveCardFactory.Create(functionCode, unitId, startAddress, pointCount, new Padding(6, 2, 6, 6));
         var group = cardShell.Group;
         var rootPanel = cardShell.RootPanel;
         var headerHost = cardShell.HeaderHost;
@@ -274,7 +262,14 @@ internal sealed class ModbusTcpClientView : UserControl
         };
 
         grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Address", Name = "Address", ReadOnly = true, Width = 82 });
-        grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Value", Name = "Value", ReadOnly = true, Width = 80 });
+        grid.Columns.Add(new DataGridViewTextBoxColumn
+        {
+            HeaderText = "Value",
+            Name = "Value",
+            ReadOnly = true,
+            AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill,
+            MinimumWidth = 72
+        });
         grid.Columns.Add(new DataGridViewTextBoxColumn
         {
             HeaderText = "Description",
@@ -472,33 +467,6 @@ internal sealed class ModbusTcpClientView : UserControl
         pollIntervalTextBox.Enabled = !isConnected;
         pollButton.Enabled = isConnected;
         pollButton.Text = pollingEnabled ? "Stop Poll" : "Start Poll";
-    }
-
-    private static Control BuildLabeledField(string labelText, TextBox textBox, int textWidth)
-    {
-        var panel = new FlowLayoutPanel
-        {
-            AutoSize = true,
-            AutoSizeMode = AutoSizeMode.GrowAndShrink,
-            Dock = DockStyle.Fill,
-            FlowDirection = FlowDirection.LeftToRight,
-            Margin = new Padding(0),
-            WrapContents = false
-        };
-
-        var label = new Label
-        {
-            AutoSize = true,
-            Margin = new Padding(0, 6, 6, 0),
-            Text = labelText
-        };
-
-        textBox.Margin = new Padding(0, 2, 0, 0);
-        textBox.Width = textWidth;
-
-        panel.Controls.Add(label);
-        panel.Controls.Add(textBox);
-        return panel;
     }
 
     private static bool IsBooleanFunction(byte functionCode)
