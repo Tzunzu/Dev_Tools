@@ -1,8 +1,0 @@
-{
-    "chat.tools.terminal.autoApprove": {
-        "/^Get-Item \\.\\\\src\\\\DevTools\\.Wpf\\\\Assets\\\\AppIcon_ElectricalA\\.png, \\.\\\\src\\\\DevTools\\.Wpf\\\\Assets\\\\AppIcon_ElectricalA\\.ico, \\.\\\\src\\\\DevTools\\.Wpf\\\\Assets\\\\AppIcon_ElectricalB\\.png, \\.\\\\src\\\\DevTools\\.Wpf\\\\Assets\\\\AppIcon_ElectricalB\\.ico, \\.\\\\src\\\\DevTools\\.Wpf\\\\Assets\\\\AppIcon_ElectricalC\\.png, \\.\\\\src\\\\DevTools\\.Wpf\\\\Assets\\\\AppIcon_ElectricalC\\.ico \\| Select-Object Name,Length,LastWriteTime$/": {
-            "approve": true,
-            "matchCommandLine": true
-        }
-    }
-}
