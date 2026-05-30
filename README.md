@@ -63,4 +63,4 @@ See [CHANGELOG.md](CHANGELOG.md) for version history and [RELEASE_CHECKLIST.md](
 
 ## License
 
-This project is licensed under the MIT License. See [LICENSE](LICENSE).
+This project is licensed under the DevTools Non-Resale License v1.0. See [LICENSE](LICENSE).
