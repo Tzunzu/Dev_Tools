@@ -33,7 +33,7 @@
                 "watch",
                 "run",
                 "--project",
-                "${workspaceFolder}/DevTools.sln"
+                "${workspaceFolder}/src/DevTools.Wpf/DevTools.Wpf.csproj"
             ],
             "problemMatcher": "$msCompile"
         }
