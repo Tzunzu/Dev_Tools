@@ -36,6 +36,68 @@
                 "${workspaceFolder}/src/DevTools.Wpf/DevTools.Wpf.csproj"
             ],
             "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "publish:win-x64:fd",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "publish",
+                "${workspaceFolder}/src/DevTools.Wpf/DevTools.Wpf.csproj",
+                "-c",
+                "Release",
+                "-r",
+                "win-x64",
+                "--self-contained",
+                "false",
+                "-o",
+                "${workspaceFolder}/artifacts/v1.0.0/win-x64/publish"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "package:win-x64:fd:zip",
+            "type": "shell",
+            "command": "powershell",
+            "args": [
+                "-NoProfile",
+                "-ExecutionPolicy",
+                "Bypass",
+                "-Command",
+                "Compress-Archive -Path '${workspaceFolder}/artifacts/v1.0.0/win-x64/publish/*' -DestinationPath '${workspaceFolder}/artifacts/v1.0.0/DevTools.Wpf-v1.0.0-win-x64.zip' -Force"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "publish:win-x64:self-contained",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "publish",
+                "${workspaceFolder}/src/DevTools.Wpf/DevTools.Wpf.csproj",
+                "-c",
+                "Release",
+                "-r",
+                "win-x64",
+                "--self-contained",
+                "true",
+                "-o",
+                "${workspaceFolder}/artifacts/v1.0.0/win-x64-self-contained/publish"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "package:win-x64:self-contained:zip",
+            "type": "shell",
+            "command": "powershell",
+            "args": [
+                "-NoProfile",
+                "-ExecutionPolicy",
+                "Bypass",
+                "-Command",
+                "Compress-Archive -Path '${workspaceFolder}/artifacts/v1.0.0/win-x64-self-contained/publish/*' -DestinationPath '${workspaceFolder}/artifacts/v1.0.0/DevTools.Wpf-v1.0.0-win-x64-self-contained.zip' -Force"
+            ],
+            "problemMatcher": []
         }
     ]
 }
