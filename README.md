@@ -1,6 +1,7 @@
 # DevTools WPF
 
-A Windows desktop toolkit for Modbus diagnostics and on-site testing.
+DevTools WPF is a professional Windows toolbox for the kinds of field jobs I work on.
+It brings the tools I use most often into one place and is designed to grow as the work evolves.
 
 DevTools WPF includes:
 - Modbus TCP Client
@@ -17,6 +18,21 @@ DevTools WPF includes:
 - Packet-level diagnostics controls
 - Preset-based workflow for quick reconnects
 - Built-in help and troubleshooting guide
+
+## Screenshots
+
+### RTU Client
+
+![RTU Client](docs/screenshots/Rtu_Client.png)
+
+### RTU Server
+
+![RTU Server](docs/screenshots/Rtu_Server.png)
+
+## Requests and Ideas
+
+More tools will be added over time.
+If you use this app and have a useful addition in mind, you are welcome to request it.
 
 ## Tech Stack
 
