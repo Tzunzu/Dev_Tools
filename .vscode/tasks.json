@@ -72,7 +72,7 @@
                 "-ExecutionPolicy",
                 "Bypass",
                 "-Command",
-                "Compress-Archive -Path '${workspaceFolder}/artifacts/v${input:releaseVersion}/win-x64/publish/*' -DestinationPath '${workspaceFolder}/artifacts/v${input:releaseVersion}/DevTools.Wpf-v${input:releaseVersion}-win-x64.zip' -Force"
+                "Compress-Archive -Path '${workspaceFolder}/artifacts/v${input:releaseVersion}/win-x64/publish/*' -DestinationPath '${workspaceFolder}/artifacts/v${input:releaseVersion}/FieldBus.Toolkit-v${input:releaseVersion}-win-x64.zip' -Force"
             ],
             "problemMatcher": []
         },
@@ -103,7 +103,7 @@
                 "-ExecutionPolicy",
                 "Bypass",
                 "-Command",
-                "Compress-Archive -Path '${workspaceFolder}/artifacts/v${input:releaseVersion}/win-x64-self-contained/publish/*' -DestinationPath '${workspaceFolder}/artifacts/v${input:releaseVersion}/DevTools.Wpf-v${input:releaseVersion}-win-x64-self-contained.zip' -Force"
+                "Compress-Archive -Path '${workspaceFolder}/artifacts/v${input:releaseVersion}/win-x64-self-contained/publish/*' -DestinationPath '${workspaceFolder}/artifacts/v${input:releaseVersion}/FieldBus.Toolkit-v${input:releaseVersion}-win-x64-self-contained.zip' -Force"
             ],
             "problemMatcher": []
         },

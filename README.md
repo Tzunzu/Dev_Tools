@@ -1,9 +1,9 @@
-# DevTools WPF
+# FieldBus Toolkit
 
-DevTools WPF is a professional Windows toolbox for the kinds of field jobs I work on.
+FieldBus Toolkit is a professional Windows toolbox for the kinds of field jobs I work on.
 It brings the tools I use most often into one place and is designed to grow as the work evolves.
 
-DevTools WPF includes:
+FieldBus Toolkit includes:
 - Modbus TCP Client
 - Modbus TCP Server
 - Modbus RTU Client

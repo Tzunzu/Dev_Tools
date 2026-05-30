@@ -1,8 +1,8 @@
-# DevTools WPF v1.0.0
+# FieldBus Toolkit v1.0.0
 
-Initial public release of DevTools WPF.
+Initial public release of FieldBus Toolkit.
 
-DevTools WPF is a Windows desktop toolkit for Modbus diagnostics and field testing, with client/server workflows for both TCP and RTU plus an RTU serial scanner for rapid device discovery.
+FieldBus Toolkit is a Windows desktop toolkit for Modbus diagnostics and field testing, with client/server workflows for both TCP and RTU plus an RTU serial scanner for rapid device discovery.
 
 ## What's Included
 

@@ -2,7 +2,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "DevTools WPF (Debug)",
+            "name": "FieldBus Toolkit (Debug)",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",

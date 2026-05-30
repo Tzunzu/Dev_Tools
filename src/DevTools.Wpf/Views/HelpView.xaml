@@ -10,12 +10,12 @@
     <Grid Margin="12">
         <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
             <StackPanel>
-                <GroupBox Header="DevTools WPF - V1 Help">
+                <GroupBox Header="FieldBus Toolkit - V1 Help">
                     <StackPanel Margin="8">
                         <TextBlock FontSize="18" FontWeight="SemiBold" Text="Overview"/>
                         <TextBlock Margin="0,4,0,0" Foreground="{DynamicResource TextSecondaryBrush}" Text="{Binding AppVersionText, ElementName=Root}"/>
                         <TextBlock Margin="0,8,0,0" Foreground="{DynamicResource TextSecondaryBrush}" TextWrapping="Wrap"
-                                   Text="DevTools WPF provides Modbus RTU and TCP client/server tools plus an RTU serial scanner for discovery and diagnostics."/>
+                                   Text="FieldBus Toolkit provides Modbus RTU and TCP client/server tools plus an RTU serial scanner for discovery and diagnostics."/>
                         <TextBlock Margin="0,6,0,0" Foreground="{DynamicResource TextSecondaryBrush}" TextWrapping="Wrap"
                                    Text="Use the left tree to select a tool. Each tool has a top connection block and a lower operation section."/>
                     </StackPanel>
