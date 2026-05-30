@@ -1,0 +1,145 @@
+<UserControl x:Class="DevTools.Wpf.Views.ModbusTcpClientView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             d:DesignHeight="720"
+             d:DesignWidth="1280">
+    <Grid Margin="12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <GroupBox Header="TCP Client" Height="76">
+            <Grid Margin="0,4,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="258"/>
+                    <ColumnDefinition Width="126"/>
+                    <ColumnDefinition Width="126"/>
+                    <ColumnDefinition Width="112"/>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="Host" Style="{StaticResource FieldLabelStyle}"/>
+                    <TextBox x:Name="HostTextBox" Width="196" Text="127.0.0.1" Style="{StaticResource ConnectionFieldTextBoxStyle}"/>
+                </StackPanel>
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="Port" Style="{StaticResource FieldLabelStyle}"/>
+                    <TextBox x:Name="PortTextBox" Width="72" Text="502" Style="{StaticResource ConnectionFieldTextBoxStyle}"/>
+                </StackPanel>
+                <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="Poll" Style="{StaticResource FieldLabelStyle}"/>
+                    <TextBox x:Name="PollIntervalTextBox" Width="72" Text="1000" Style="{StaticResource ConnectionFieldTextBoxStyle}"/>
+                </StackPanel>
+                <Button x:Name="ConnectButton" Grid.Column="3" Content="Connect" Width="104" Margin="0,0,8,0" Style="{StaticResource ConnectionPrimaryButtonStyle}" Click="ConnectButton_Click"/>
+                <Button x:Name="RefreshButton" Grid.Column="4" Content="Refresh" Width="92" Style="{StaticResource ConnectionSecondaryButtonStyle}" Click="RefreshButton_Click"/>
+                <TextBlock x:Name="ConnectionStatusText" Grid.Column="5" Text="Disconnected" Foreground="{DynamicResource TextSecondaryBrush}" VerticalAlignment="Center" Margin="10,0,0,0"/>
+            </Grid>
+        </GroupBox>
+
+        <GroupBox Grid.Row="1" Header="Read Data" Padding="12,10,12,12" Margin="0">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="36"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Button Content="Add Slave" Style="{StaticResource ToolbarButtonStyle}" Click="AddSlaveButton_Click"/>
+                    <Button x:Name="StartPollButton" Content="Start Poll" Style="{StaticResource ToolbarButtonStyle}" Click="StartPollButton_Click"/>
+                    <Button Content="Save Config" Style="{StaticResource ToolbarButtonStyle}" Click="SaveConfigButton_Click"/>
+                    <Button Content="Update Config" Style="{StaticResource ToolbarWideButtonStyle}" Click="UpdateConfigButton_Click"/>
+                    <ComboBox x:Name="PresetComboBox" IsEditable="True" Style="{StaticResource ToolbarPresetComboStyle}" ItemsSource="{Binding PresetNames}" SelectionChanged="PresetComboBox_SelectionChanged"/>
+                    <Button Content="Rename" Style="{StaticResource ToolbarRenameButtonStyle}" Click="RenamePresetButton_Click"/>
+                    <Button Content="Delete" Style="{StaticResource ToolbarDeleteButtonStyle}" Click="DeletePresetButton_Click"/>
+                </StackPanel>
+
+                <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+                    <ItemsControl ItemsSource="{Binding Cards}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Horizontal"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Width="220" Margin="10,0,6,0" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Background="{DynamicResource SurfaceBrush}">
+                                    <Grid Margin="6,10,6,6">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="22"/>
+                                            <RowDefinition Height="*"/>
+                                        </Grid.RowDefinitions>
+                                        <Border Grid.Row="0" Padding="4,3,4,5" Background="Transparent">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="34"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="30"/>
+                                                    <ColumnDefinition Width="56"/>
+                                                </Grid.ColumnDefinitions>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto"/>
+                                                    <RowDefinition Height="6"/>
+                                                    <RowDefinition Height="Auto"/>
+                                                </Grid.RowDefinitions>
+                                                <TextBlock Text="Func" VerticalAlignment="Center"/>
+                                                <ComboBox Grid.Column="1" Margin="0,1,0,0" Style="{StaticResource ConnectionFieldComboStyle}" SelectedIndex="{Binding FunctionIndex}">
+                                                    <ComboBoxItem Content="Coil"/>
+                                                    <ComboBoxItem Content="Discrete"/>
+                                                    <ComboBoxItem Content="Holding"/>
+                                                    <ComboBoxItem Content="Input"/>
+                                                </ComboBox>
+                                                <TextBlock Grid.Column="2" Text="ID" VerticalAlignment="Center" Margin="1,0,3,0"/>
+                                                <TextBox Grid.Column="3" Width="52" Margin="0,1,0,0" Text="{Binding UnitId}"/>
+                                                <TextBlock Grid.Row="2" Text="Start" VerticalAlignment="Center"/>
+                                                <TextBox Grid.Row="2" Grid.Column="1" Width="82" Margin="1,1,0,0" Text="{Binding Start}"/>
+                                                <TextBlock Grid.Row="2" Grid.Column="2" Text="Len" VerticalAlignment="Center" Margin="1,0,3,0"/>
+                                                <TextBox Grid.Row="2" Grid.Column="3" Width="52" Margin="1,1,1,1" Text="{Binding Length}"/>
+                                            </Grid>
+                                        </Border>
+                                        <TextBlock Grid.Row="1" Text="{Binding PollStatus}" Background="Transparent" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" VerticalAlignment="Center" Margin="0,0,0,0"/>
+                                        <DataGrid Grid.Row="2" Margin="0,12,0,0" HeadersVisibility="Column" CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False" IsReadOnly="False" ItemsSource="{Binding Rows}" Loaded="RequestGrid_Loaded" PreviewMouseRightButtonDown="RequestGrid_PreviewMouseRightButtonDown" CellEditEnding="RequestGrid_CellEditEnding">
+                                            <DataGrid.ContextMenu>
+                                                <ContextMenu DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}" Opened="CardContextMenu_Opened">
+                                                    <MenuItem Header="Address Format">
+                                                        <MenuItem Header="Decimal" Tag="addr-dec" IsCheckable="True" Click="AddressFormatDecimalMenuItem_Click"/>
+                                                        <MenuItem Header="Hex" Tag="addr-hex" IsCheckable="True" Click="AddressFormatHexMenuItem_Click"/>
+                                                    </MenuItem>
+                                                    <MenuItem Header="Value Data Type">
+                                                        <MenuItem Header="UINT" Tag="dtype-UInt" IsCheckable="True" Click="ValueDataTypeMenuItem_Click"/>
+                                                        <MenuItem Header="INT" Tag="dtype-Int" IsCheckable="True" Click="ValueDataTypeMenuItem_Click"/>
+                                                        <MenuItem Header="Hex" Tag="dtype-Hex" IsCheckable="True" Click="ValueDataTypeMenuItem_Click"/>
+                                                        <MenuItem Header="Bits" Tag="dtype-Bits" IsCheckable="True" Click="ValueDataTypeMenuItem_Click"/>
+                                                        <MenuItem Header="String" Tag="dtype-String" IsCheckable="True" Click="ValueDataTypeMenuItem_Click"/>
+                                                        <MenuItem Header="UDINT" Tag="dtype-UDInt" IsCheckable="True" Click="ValueDataTypeMenuItem_Click"/>
+                                                        <MenuItem Header="DINT" Tag="dtype-DInt" IsCheckable="True" Click="ValueDataTypeMenuItem_Click"/>
+                                                        <MenuItem Header="FLOAT" Tag="dtype-Float" IsCheckable="True" Click="ValueDataTypeMenuItem_Click"/>
+                                                    </MenuItem>
+                                                    <Separator/>
+                                                    <MenuItem Header="Add/Edit Description" Click="AddEditDescriptionMenuItem_Click"/>
+                                                    <MenuItem Header="Clear Description" Click="ClearDescriptionMenuItem_Click"/>
+                                                    <Separator/>
+                                                    <MenuItem Header="Show Description Column" IsCheckable="True" IsChecked="{Binding ShowDescriptionColumn, Mode=TwoWay}" Click="ShowDescriptionColumnMenuItem_Click"/>
+                                                </ContextMenu>
+                                            </DataGrid.ContextMenu>
+                                            <DataGrid.Columns>
+                                                <DataGridTextColumn Header="Address" Width="82" Binding="{Binding Address}"/>
+                                                <DataGridTextColumn Header="Value" Width="*" Binding="{Binding Value}"/>
+                                                <DataGridTextColumn Header="Description" Width="*" MinWidth="120" Binding="{Binding Description}" Visibility="Collapsed"/>
+                                            </DataGrid.Columns>
+                                        </DataGrid>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Grid>
+        </GroupBox>
+    </Grid>
+</UserControl>

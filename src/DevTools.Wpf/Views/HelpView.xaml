@@ -1,0 +1,89 @@
+<UserControl x:Class="DevTools.Wpf.Views.HelpView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             d:DesignHeight="720"
+             d:DesignWidth="1280">
+    <Grid Margin="12">
+        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+            <StackPanel>
+                <GroupBox Header="DevTools WPF - V1 Help">
+                    <StackPanel Margin="8">
+                        <TextBlock FontSize="18" FontWeight="SemiBold" Text="Overview"/>
+                        <TextBlock Margin="0,8,0,0" Foreground="{DynamicResource TextSecondaryBrush}" TextWrapping="Wrap"
+                                   Text="DevTools WPF provides Modbus RTU and TCP client/server tools plus an RTU serial scanner for discovery and diagnostics."/>
+                        <TextBlock Margin="0,6,0,0" Foreground="{DynamicResource TextSecondaryBrush}" TextWrapping="Wrap"
+                                   Text="Use the left tree to select a tool. Each tool has a top connection block and a lower operation section."/>
+                    </StackPanel>
+                </GroupBox>
+
+                <GroupBox Header="Quick Start" Margin="0">
+                    <StackPanel Margin="8">
+                        <TextBlock FontSize="16" FontWeight="SemiBold" Text="RTU Client"/>
+                        <TextBlock Margin="0,6,0,0" Foreground="{DynamicResource TextSecondaryBrush}" Text="1. Select COM port, baud, and frame."/>
+                        <TextBlock Margin="0,2,0,0" Foreground="{DynamicResource TextSecondaryBrush}" Text="2. Click Open Port."/>
+                        <TextBlock Margin="0,2,0,0" Foreground="{DynamicResource TextSecondaryBrush}" Text="3. Configure one or more slave cards and click Start Poll."/>
+
+                        <TextBlock Margin="0,12,0,0" FontSize="16" FontWeight="SemiBold" Text="RTU Server"/>
+                        <TextBlock Margin="0,6,0,0" Foreground="{DynamicResource TextSecondaryBrush}" Text="1. Set COM port, frame, unit ID, and map values."/>
+                        <TextBlock Margin="0,2,0,0" Foreground="{DynamicResource TextSecondaryBrush}" Text="2. Click Start."/>
+                        <TextBlock Margin="0,2,0,0" Foreground="{DynamicResource TextSecondaryBrush}" Text="3. Use /regs rtu all to verify mapped datastore values."/>
+
+                        <TextBlock Margin="0,12,0,0" FontSize="16" FontWeight="SemiBold" Text="TCP Client/Server"/>
+                        <TextBlock Margin="0,6,0,0" Foreground="{DynamicResource TextSecondaryBrush}" Text="1. Start TCP Server with bind IP, port, and unit ID."/>
+                        <TextBlock Margin="0,2,0,0" Foreground="{DynamicResource TextSecondaryBrush}" Text="2. Connect TCP Client to server host/port and poll cards."/>
+                        <TextBlock Margin="0,2,0,0" Foreground="{DynamicResource TextSecondaryBrush}" Text="3. Use /regs tcp all for full mapped snapshot."/>
+
+                        <TextBlock Margin="0,12,0,0" FontSize="16" FontWeight="SemiBold" Text="RTU Serial Scanner"/>
+                        <TextBlock Margin="0,6,0,0" Foreground="{DynamicResource TextSecondaryBrush}" Text="1. Select one read type (FC01/02/03/04) and one address."/>
+                        <TextBlock Margin="0,2,0,0" Foreground="{DynamicResource TextSecondaryBrush}" Text="2. Set slave range, timeout, baud rates, and frame combinations."/>
+                        <TextBlock Margin="0,2,0,0" Foreground="{DynamicResource TextSecondaryBrush}" Text="3. Click Start Scan and review each attempt in Scan Results."/>
+                    </StackPanel>
+                </GroupBox>
+
+                <GroupBox Header="Console Commands" Margin="0">
+                    <StackPanel Margin="8">
+                        <TextBlock FontFamily="Consolas" Foreground="{DynamicResource TextSecondaryBrush}" Text="/help - Show all commands"/>
+                        <TextBlock FontFamily="Consolas" Foreground="{DynamicResource TextSecondaryBrush}" Text="/clear - Clear output console"/>
+                        <TextBlock FontFamily="Consolas" Foreground="{DynamicResource TextSecondaryBrush}" Text="/status - Active view, console state, log count"/>
+                        <TextBlock FontFamily="Consolas" Foreground="{DynamicResource TextSecondaryBrush}" Text="/loglevel info|debug - Diagnostics level"/>
+                        <TextBlock FontFamily="Consolas" Foreground="{DynamicResource TextSecondaryBrush}" Text="/packets on|off - Toggle packet RX trace"/>
+                        <TextBlock FontFamily="Consolas" Foreground="{DynamicResource TextSecondaryBrush}" Text="/regs [tcp|rtu] all [start count] - Dump mapped values"/>
+                        <TextBlock FontFamily="Consolas" Foreground="{DynamicResource TextSecondaryBrush}" Text="/sync [tcp|rtu|all] - Force server UI sync from datastore"/>
+                    </StackPanel>
+                </GroupBox>
+
+                <GroupBox Header="Troubleshooting" Margin="0">
+                    <StackPanel Margin="8">
+                        <TextBlock FontWeight="SemiBold" Text="Timeout"/>
+                        <TextBlock Margin="0,4,0,0" Foreground="{DynamicResource TextSecondaryBrush}" TextWrapping="Wrap"
+                                   Text="Check COM port selection, baud/frame mismatch, slave ID range, and line wiring."/>
+
+                        <TextBlock Margin="0,10,0,0" FontWeight="SemiBold" Text="Illegal Function / Illegal Data Address"/>
+                        <TextBlock Margin="0,4,0,0" Foreground="{DynamicResource TextSecondaryBrush}" TextWrapping="Wrap"
+                                   Text="Device does not support requested function or the target address is outside its map."/>
+
+                        <TextBlock Margin="0,10,0,0" FontWeight="SemiBold" Text="CRC Error"/>
+                        <TextBlock Margin="0,4,0,0" Foreground="{DynamicResource TextSecondaryBrush}" TextWrapping="Wrap"
+                                   Text="Usually indicates line noise, wiring issues, or incorrect serial settings."/>
+
+                        <TextBlock Margin="0,10,0,0" FontWeight="SemiBold" Text="PortError in Scanner"/>
+                        <TextBlock Margin="0,4,0,0" Foreground="{DynamicResource TextSecondaryBrush}" TextWrapping="Wrap"
+                                   Text="The selected port could not be opened for that baud/frame attempt. Slave shows '-' because no slave read occurred."/>
+                    </StackPanel>
+                </GroupBox>
+
+                <GroupBox Header="Notes" Margin="0,0,0,4">
+                    <StackPanel Margin="8">
+                        <TextBlock Foreground="{DynamicResource TextSecondaryBrush}" TextWrapping="Wrap"
+                                   Text="Presets are stored in the application output folder. Keep backups if you rely on production test profiles."/>
+                        <TextBlock Margin="0,6,0,0" Foreground="{DynamicResource TextSecondaryBrush}" TextWrapping="Wrap"
+                                   Text="For V1 release: verify COM permissions, close other applications holding the same port, and validate with known-good loopback first."/>
+                    </StackPanel>
+                </GroupBox>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

@@ -1,0 +1,21 @@
+[
+  {
+    "Name": "Default",
+    "Port": "COM3",
+    "BaudRate": "19200",
+    "Frame": "8N1",
+    "PollIntervalMs": 1000,
+    "Rts": false,
+    "Dtr": false,
+    "Cards": [
+      {
+        "SlaveId": 1,
+        "Start": 0,
+        "Length": 10,
+        "FunctionIndex": 2,
+        "Descriptions": {},
+        "ShowDescriptionColumn": false
+      }
+    ]
+  }
+]

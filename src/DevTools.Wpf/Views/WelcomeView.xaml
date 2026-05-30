@@ -1,0 +1,32 @@
+<UserControl x:Class="DevTools.Wpf.Views.WelcomeView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             d:DesignHeight="720"
+             d:DesignWidth="1280">
+    <Grid Margin="12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <GroupBox Header="Welcome">
+            <StackPanel Margin="8">
+                <TextBlock FontSize="22" FontWeight="SemiBold" Text="DevTools WPF Migration"/>
+                <TextBlock Margin="0,10,0,0"
+                           Foreground="{DynamicResource TextSecondaryBrush}"
+                           Text="Select a tool from the navigation tree to open its WPF view."
+                           TextWrapping="Wrap"/>
+            </StackPanel>
+        </GroupBox>
+
+        <GroupBox Grid.Row="1" Header="Migration Status" Margin="0">
+            <StackPanel Margin="8">
+                <TextBlock Foreground="{DynamicResource TextSecondaryBrush}" TextWrapping="Wrap" Text="The WPF shell now mirrors the main tools and uses the shared dark theme tokens."/>
+                <TextBlock Margin="0,8,0,0" Foreground="{DynamicResource TextSecondaryBrush}" TextWrapping="Wrap" Text="Next work is functionality parity and deeper state persistence."/>
+            </StackPanel>
+        </GroupBox>
+    </Grid>
+</UserControl>

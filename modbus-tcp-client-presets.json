@@ -1,0 +1,22 @@
+[
+  {
+    "Name": "Loopback",
+    "Host": "127.0.0.1",
+    "Port": 1502,
+    "PollIntervalMs": 1000,
+    "Cards": [
+      {
+        "UnitId": 1,
+        "Start": 0,
+        "Length": 10,
+        "FunctionIndex": 2,
+        "Descriptions": {
+          "0": "Expect 10",
+          "1": "Expect 20",
+          "2": "Expect 30"
+        },
+        "ShowDescriptionColumn": true
+      }
+    ]
+  }
+]

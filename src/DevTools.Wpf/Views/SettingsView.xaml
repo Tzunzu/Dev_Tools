@@ -1,0 +1,40 @@
+<UserControl x:Class="DevTools.Wpf.Views.SettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             d:DesignHeight="720"
+             d:DesignWidth="1280">
+    <Grid Margin="12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <GroupBox Header="Appearance" Margin="0,0,0,10">
+            <StackPanel Margin="8" Orientation="Horizontal" VerticalAlignment="Center">
+                <TextBlock Text="Theme" Style="{StaticResource FieldLabelStyle}"/>
+                <ComboBox x:Name="ThemeComboBox" Width="160" Style="{StaticResource ConnectionFieldComboStyle}" SelectionChanged="ThemeComboBox_SelectionChanged">
+                    <ComboBoxItem Content="Dark" IsSelected="True"/>
+                    <ComboBoxItem Content="Light"/>
+                </ComboBox>
+            </StackPanel>
+        </GroupBox>
+
+        <GroupBox Grid.Row="1" Header="Output" Margin="0,0,0,10">
+            <StackPanel Margin="8">
+                <CheckBox Content="Use compact output rows" Style="{StaticResource ConnectionCheckBoxStyle}"/>
+                <CheckBox Margin="0,8,0,0" Content="Show raw hex frames in output" Style="{StaticResource ConnectionCheckBoxStyle}"/>
+            </StackPanel>
+        </GroupBox>
+
+        <GroupBox Grid.Row="2" Header="Notes" Margin="0">
+            <StackPanel Margin="8">
+                <TextBlock Foreground="{DynamicResource TextSecondaryBrush}" TextWrapping="Wrap" Text="Theme selection applies immediately and is saved for the next app launch."/>
+                <TextBlock Margin="0,8,0,0" Foreground="{DynamicResource TextSecondaryBrush}" TextWrapping="Wrap" Text="Output options are scaffolded and can be wired to behavior as tools are added."/>
+            </StackPanel>
+        </GroupBox>
+    </Grid>
+</UserControl>

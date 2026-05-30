@@ -18,6 +18,17 @@
             "stopAtEntry": false
         },
         {
+            "name": "DevTools WPF (Debug)",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/src/DevTools.Wpf/bin/Debug/net8.0-windows/DevTools.Wpf.exe",
+            "args": [],
+            "cwd": "${workspaceFolder}/src/DevTools.Wpf",
+            "console": "internalConsole",
+            "stopAtEntry": false
+        },
+        {
             "name": ".NET Core Attach",
             "type": "coreclr",
             "request": "attach"

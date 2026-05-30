@@ -1,0 +1,28 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <SolidColorBrush x:Key="AppBackgroundBrush" Color="#FF1E1E1E"/>
+    <SolidColorBrush x:Key="SurfaceBrush" Color="#FF252526"/>
+    <SolidColorBrush x:Key="SurfaceAltBrush" Color="#FF2D2D30"/>
+    <SolidColorBrush x:Key="BorderBrush" Color="#FF3F3F46"/>
+    <SolidColorBrush x:Key="TextPrimaryBrush" Color="#FFD4D4D4"/>
+    <SolidColorBrush x:Key="TextSecondaryBrush" Color="#FFB5B5B5"/>
+    <SolidColorBrush x:Key="AccentBrush" Color="#FF007ACC"/>
+    <SolidColorBrush x:Key="AccentHoverBrush" Color="#FF1784CC"/>
+    <SolidColorBrush x:Key="AccentPressedBrush" Color="#FF0E639C"/>
+    <SolidColorBrush x:Key="ConnectionPrimaryBrush" Color="#FF0F766E"/>
+    <SolidColorBrush x:Key="ConnectionPrimaryHoverBrush" Color="#FF0D9488"/>
+    <SolidColorBrush x:Key="ConnectionPrimaryPressedBrush" Color="#FF115E59"/>
+    <SolidColorBrush x:Key="WindowCaptionHoverBrush" Color="#FF333337"/>
+    <SolidColorBrush x:Key="WindowCaptionPressedBrush" Color="#FF1E1E20"/>
+    <SolidColorBrush x:Key="WindowCloseHoverBrush" Color="#FFE81123"/>
+    <SolidColorBrush x:Key="WindowClosePressedBrush" Color="#FFC50F1F"/>
+    <SolidColorBrush x:Key="ComboHoverBrush" Color="#FF3A3A3D"/>
+    <SolidColorBrush x:Key="ComboPressedBrush" Color="#FF2F2F33"/>
+    <SolidColorBrush x:Key="ComboSelectionBrush" Color="#FF094771"/>
+    <SolidColorBrush x:Key="GridHeaderBrush" Color="#FF333337"/>
+    <SolidColorBrush x:Key="GridRowBrush" Color="#FF252526"/>
+    <SolidColorBrush x:Key="GridAltRowBrush" Color="#FF2D2D30"/>
+    <SolidColorBrush x:Key="GridSelectionBrush" Color="#FF094771"/>
+    <SolidColorBrush x:Key="SuccessBrush" Color="#FF78C9B0"/>
+    <SolidColorBrush x:Key="ErrorBrush" Color="#FFE06C75"/>
+</ResourceDictionary>

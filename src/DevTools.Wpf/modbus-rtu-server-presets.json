@@ -1,0 +1,113 @@
+[
+  {
+    "Name": "Defualt",
+    "Port": "COM3",
+    "BaudRate": "19200",
+    "Frame": "8N1",
+    "UnitId": 1,
+    "Rts": false,
+    "Dtr": false,
+    "Cards": [
+      {
+        "Title": "Holding Registers",
+        "Start": 0,
+        "Length": 16,
+        "Values": [
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        "Descriptions": {},
+        "ShowDescriptionColumn": false
+      },
+      {
+        "Title": "Input Registers",
+        "Start": 0,
+        "Length": 16,
+        "Values": [
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        "Descriptions": {},
+        "ShowDescriptionColumn": false
+      },
+      {
+        "Title": "Discrete Inputs",
+        "Start": 0,
+        "Length": 16,
+        "Values": [
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        "Descriptions": {},
+        "ShowDescriptionColumn": false
+      },
+      {
+        "Title": "Coils",
+        "Start": 0,
+        "Length": 16,
+        "Values": [
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        "Descriptions": {},
+        "ShowDescriptionColumn": false
+      }
+    ]
+  }
+]
