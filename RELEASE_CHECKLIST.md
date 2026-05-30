@@ -33,4 +33,5 @@
 ## 6. Pre-Release Hygiene
 - [ ] `git status` is clean.
 - [ ] Changelog entry for v1 is complete.
+- [ ] `README.md` and `LICENSE` are present and accurate.
 - [ ] Tag release commit (`v1.0.0`) after final verification.
