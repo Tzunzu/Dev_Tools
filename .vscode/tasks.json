@@ -1,5 +1,13 @@
 {
     "version": "2.0.0",
+    "inputs": [
+        {
+            "id": "releaseVersion",
+            "type": "promptString",
+            "description": "Release version (without leading v)",
+            "default": "1.0.0"
+        }
+    ],
     "tasks": [
         {
             "label": "build",
@@ -51,7 +59,7 @@
                 "--self-contained",
                 "false",
                 "-o",
-                "${workspaceFolder}/artifacts/v1.0.0/win-x64/publish"
+                "${workspaceFolder}/artifacts/v${input:releaseVersion}/win-x64/publish"
             ],
             "problemMatcher": "$msCompile"
         },
@@ -64,7 +72,7 @@
                 "-ExecutionPolicy",
                 "Bypass",
                 "-Command",
-                "Compress-Archive -Path '${workspaceFolder}/artifacts/v1.0.0/win-x64/publish/*' -DestinationPath '${workspaceFolder}/artifacts/v1.0.0/DevTools.Wpf-v1.0.0-win-x64.zip' -Force"
+                "Compress-Archive -Path '${workspaceFolder}/artifacts/v${input:releaseVersion}/win-x64/publish/*' -DestinationPath '${workspaceFolder}/artifacts/v${input:releaseVersion}/DevTools.Wpf-v${input:releaseVersion}-win-x64.zip' -Force"
             ],
             "problemMatcher": []
         },
@@ -82,7 +90,7 @@
                 "--self-contained",
                 "true",
                 "-o",
-                "${workspaceFolder}/artifacts/v1.0.0/win-x64-self-contained/publish"
+                "${workspaceFolder}/artifacts/v${input:releaseVersion}/win-x64-self-contained/publish"
             ],
             "problemMatcher": "$msCompile"
         },
@@ -95,7 +103,25 @@
                 "-ExecutionPolicy",
                 "Bypass",
                 "-Command",
-                "Compress-Archive -Path '${workspaceFolder}/artifacts/v1.0.0/win-x64-self-contained/publish/*' -DestinationPath '${workspaceFolder}/artifacts/v1.0.0/DevTools.Wpf-v1.0.0-win-x64-self-contained.zip' -Force"
+                "Compress-Archive -Path '${workspaceFolder}/artifacts/v${input:releaseVersion}/win-x64-self-contained/publish/*' -DestinationPath '${workspaceFolder}/artifacts/v${input:releaseVersion}/DevTools.Wpf-v${input:releaseVersion}-win-x64-self-contained.zip' -Force"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "release:win-x64:fd",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "publish:win-x64:fd",
+                "package:win-x64:fd:zip"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "release:win-x64:self-contained",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "publish:win-x64:self-contained",
+                "package:win-x64:self-contained:zip"
             ],
             "problemMatcher": []
         }
