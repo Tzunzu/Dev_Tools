@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             x:Name="Root"
              mc:Ignorable="d"
              d:DesignHeight="720"
              d:DesignWidth="1280">
@@ -12,6 +13,7 @@
                 <GroupBox Header="DevTools WPF - V1 Help">
                     <StackPanel Margin="8">
                         <TextBlock FontSize="18" FontWeight="SemiBold" Text="Overview"/>
+                        <TextBlock Margin="0,4,0,0" Foreground="{DynamicResource TextSecondaryBrush}" Text="{Binding AppVersionText, ElementName=Root}"/>
                         <TextBlock Margin="0,8,0,0" Foreground="{DynamicResource TextSecondaryBrush}" TextWrapping="Wrap"
                                    Text="DevTools WPF provides Modbus RTU and TCP client/server tools plus an RTU serial scanner for discovery and diagnostics."/>
                         <TextBlock Margin="0,6,0,0" Foreground="{DynamicResource TextSecondaryBrush}" TextWrapping="Wrap"
