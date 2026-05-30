@@ -59,7 +59,7 @@ dotnet publish src/DevTools.Wpf/DevTools.Wpf.csproj -c Release -r win-x64 --self
 
 ## Release Notes
 
-See [CHANGELOG.md](CHANGELOG.md) for version history and [RELEASE_CHECKLIST.md](RELEASE_CHECKLIST.md) for release validation.
+See [CHANGELOG.md](CHANGELOG.md) for version history.
 
 ## License
 
